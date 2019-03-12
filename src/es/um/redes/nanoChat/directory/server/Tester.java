@@ -8,7 +8,7 @@ public class Tester {
 
 	public static void main(String[] args) throws IOException {
 		DirectoryConnector dc = new DirectoryConnector("localhost");
-		Boolean registro = dc.registerServerForProtocol(0, 6969);
+		Boolean registro = dc.registerServerForProtocol(0, 6868);
 		if (registro == true){System.out.println("Registro ha sido guardado correctamente");}
 		InetSocketAddress address = dc.getServerForProtocol(0);
 		

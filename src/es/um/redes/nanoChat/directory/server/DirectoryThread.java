@@ -14,7 +14,7 @@ public class DirectoryThread extends Thread {
 	protected HashMap<Integer,InetSocketAddress> servers;
 
 	//Socket de comunicación UDP
-	protected DatagramSocket socket = null;
+	protected DatagramSocket socket;
 	//Probabilidad de descarte del mensaje
 	protected double messageDiscardProbability;
 	
@@ -63,6 +63,7 @@ public class DirectoryThread extends Thread {
 				
 				//TODO 4) Analizar y procesar la solicitud (llamada a processRequestFromCLient)
 				//processRequestFromClient(, client);
+				processRequestFromClient(pckt.getData(), client);
 				
 				//TODO 5) Tratar las excepciones que puedan producirse
 				} catch(IOException e) {
@@ -79,9 +80,17 @@ public class DirectoryThread extends Thread {
 		// 1) Extraemos el tipo de mensaje recibido
 		ByteBuffer bb = ByteBuffer.wrap(data);
 		Byte opcode = bb.get();
-		Integer protocol = bb.getInt(1);
-		DatagramPacket pckt = new DatagramPacket(data, data.length);
-		InetSocketAddress serverAddress = (InetSocketAddress) pckt.getSocketAddress();		
+		byte[] IP_array = new byte[4];
+		int i = 0;
+		while (i<4) {
+			byte ip = bb.get(); 
+			IP_array[i] = ip;
+			i++;
+		}
+		int puerto = bb.getInt();
+		InetAddress address = InetAddress.getByAddress(IP_array);
+		InetSocketAddress serverAddress = new InetSocketAddress(address, puerto); 
+		int protocol = bb.getInt();
 		switch(opcode) {
 		// 3) Procesar el caso de que sea una consulta
 			case OPCODE_CONSULTA:	
@@ -118,15 +127,15 @@ public class DirectoryThread extends Thread {
 	//Método para enviar la dirección del servidor al cliente
 	private void sendServerInfo(InetSocketAddress serverAddress, InetSocketAddress clientAddr, int protocol) throws IOException {
 		//TODO Obtener la representación binaria de la dirección
-		int Socket = serverAddress.getPort();
 		//TODO Construir respuesta
+		int puerto = serverAddress.getPort();
 		ByteBuffer bf = ByteBuffer.allocate(13);
 		bf.put(OPCODE_RESPONSE_CONSULTA);
 		bf.put(serverAddress.getAddress().getAddress()); 	   //IP
-		bf.putInt(Socket); //Puerto
+		bf.putInt(puerto); //Puerto
 		bf.putInt(protocol);//Protocolo
-		byte[] buf = bf.array();
-		DatagramPacket dp = new DatagramPacket(buf, buf.length, clientAddr);
+		byte[] array = bf.array();
+		DatagramPacket dp = new DatagramPacket(array, array.length, clientAddr);
 		//TODO Enviar respuesta
 		socket.send(dp);
 	}
@@ -138,7 +147,7 @@ public class DirectoryThread extends Thread {
 		buf[0] = OPCODE_REGISTRO_OK;
 		DatagramPacket dp =  new DatagramPacket(buf, buf.length);
 		//TODO Enviar respuesta
-		socket.send(dp);
+
 	}
 	
 	private void sendNOOK(InetSocketAddress clientAddr) throws IOException {

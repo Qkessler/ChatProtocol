@@ -12,6 +12,8 @@ import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
+import javax.xml.crypto.Data;
+
 /**
  * Cliente con métodos de consulta y actualización específicos del directorio
  */
@@ -63,27 +65,9 @@ public class DirectoryConnector {
 		byte[] response = new byte[PACKET_MAX_SIZE];
 		DatagramPacket packet = new DatagramPacket(response, response.length);
 		socket.receive(packet);
+		return getAddressFromResponse(packet);
 		
-		ByteBuffer bb = ByteBuffer.wrap(packet.getData());
-		Byte opcode = bb.get();
-		byte[] IP_array = new byte[4];
-		int i = 0;
-		while (i<4) {
-			byte ip = bb.get(); //Modificar
-			IP_array[i] = ip;
-			i++;
-		}
-		int puerto = bb.getInt();
-		InetAddress address = InetAddress.getByAddress(IP_array);
-		InetSocketAddress directiontosend = new InetSocketAddress(address, puerto); 
-		//TODO Procesamos la respuesta para devolver la dirección que hay en ella
-		if (opcode == OPCODE_RESPONSE_CONSULTA) {
-			return directiontosend;
-			//vale okey.
-		}
-		else {return null;}
 	}
-
 	//Método para generar el mensaje de consulta (para obtener el servidor asociado a un protocolo)
 	private byte[] buildQuery(int protocol) {
 		ByteBuffer bb = ByteBuffer.allocate(5);
@@ -96,14 +80,24 @@ public class DirectoryConnector {
 	//Método para obtener la dirección de internet a partir del mensaje UDP de respuesta
 	private InetSocketAddress getAddressFromResponse(DatagramPacket packet) throws UnknownHostException {
 		// Analizar si la respuesta no contiene dirección (devolver null)
-		if (packet.getLength() == 1) {
-			return null;
-		}
+		ByteBuffer bb = ByteBuffer.wrap(packet.getData());
+		Byte opcode = bb.get();
+		if (opcode == OPCODE_CONSULTA_VACIA) {return null;}
 		else {
-		// Si la respuesta no está vacía, devolver la dirección (extraerla del mensaje)
-			InetSocketAddress direction = (InetSocketAddress) packet.getSocketAddress();
-			return direction;
+			byte[] IP_array = new byte[4];
+			int i = 0;
+			while (i<4) {
+				byte ip = bb.get(); //Modificar
+				IP_array[i] = ip;
+				i++;
+			}
+			int puerto = bb.getInt();
+			InetAddress address = InetAddress.getByAddress(IP_array);
+			InetSocketAddress directiontosend = new InetSocketAddress(address, puerto); 
+			return directiontosend;
 		}
+		// Si la respuesta no está vacía, devolver la dirección (extraerla del mensaje)
+			
 	}
 	/**
 	 * Envía una solicitud para registrar el servidor de chat asociado a un determinado protocolo
@@ -114,12 +108,13 @@ public class DirectoryConnector {
 		// Construir solicitud de registro (buildRegistration)
 		byte[] registration = buildRegistration(protocol, port);
 		// Enviar solicitud
-		InetSocketAddress serverAddress = new InetSocketAddress(port);
-		DatagramPacket pckt = new DatagramPacket(registration, registration.length, serverAddress);
+		DatagramPacket pckt = new DatagramPacket(registration, registration.length, directoryAddress);
 		socket.send(pckt);
 		// Recibe respuesta
-		socket.receive(pckt);
-		byte[] array = pckt.getData();
+		byte[] response = new byte[PACKET_MAX_SIZE];
+		DatagramPacket packet = new DatagramPacket(response, response.length);
+		socket.receive(packet);
+		byte[] array = packet.getData();
 		ByteBuffer buf = ByteBuffer.wrap(array);
 		Byte opcode = buf.get();
 		// Procesamos la respuesta para ver si se ha podido registrar correctamente
