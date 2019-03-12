@@ -66,14 +66,19 @@ public class DirectoryConnector {
 		
 		ByteBuffer bb = ByteBuffer.wrap(packet.getData());
 		Byte opcode = bb.get();
-		Byte[] IP_array = new Byte[4];
-		IP_array = bb.getInt(); //Modificar
-		int puerto = bb.getInt(); //Modificar. En los tres no se usa indice, es modificando campos de array.
-		int protocolo = bb.get(); //Modificar
+		byte[] IP_array = new byte[4];
+		int i = 0;
+		while (i<4) {
+			byte ip = bb.get(); //Modificar
+			IP_array[i] = ip;
+			i++;
+		}
+		int puerto = bb.getInt();
+		InetAddress address = InetAddress.getByAddress(IP_array);
+		InetSocketAddress directiontosend = new InetSocketAddress(address, puerto); 
 		//TODO Procesamos la respuesta para devolver la dirección que hay en ella
 		if (opcode == OPCODE_RESPONSE_CONSULTA) {
-			InetSocketAddress direction = (InetSocketAddress) packet.getSocketAddress();
-			return direction;
+			return directiontosend;
 		}
 		else {return null;}
 	}
