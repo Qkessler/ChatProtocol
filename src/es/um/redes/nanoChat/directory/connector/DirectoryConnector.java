@@ -79,7 +79,7 @@ public class DirectoryConnector {
 		//TODO Procesamos la respuesta para devolver la dirección que hay en ella
 		if (opcode == OPCODE_RESPONSE_CONSULTA) {
 			return directiontosend;
-			//vale
+			//vale okey.
 		}
 		else {return null;}
 	}
