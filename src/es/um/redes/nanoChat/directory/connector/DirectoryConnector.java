@@ -38,7 +38,8 @@ public class DirectoryConnector {
 
 	public DirectoryConnector(String agentAddress) throws IOException {
 		//? A partir de la dirección y del puerto generar la dirección de conexión para el Socket
-		InetSocketAddress serverAddress = new InetSocketAddress(DEFAULT_PORT);
+		InetAddress addr = InetAddress.getByName(agentAddress);
+		directoryAddress = new InetSocketAddress(addr, DEFAULT_PORT);
 		//? Crear el socket UDP
 		socket = new DatagramSocket();
 		
@@ -59,11 +60,13 @@ public class DirectoryConnector {
 		//TODO Establecer el temporizador para el caso en que no haya respuesta
 		socket.setSoTimeout(TIMEOUT);
 		//TODO Recibir la respuesta
-		socket.receive(dp);
-		byte[] array = dp.getData();
-		ByteBuffer bb = ByteBuffer.wrap(array);
+		byte[] response = new byte[PACKET_MAX_SIZE];
+		DatagramPacket packet = new DatagramPacket(response, response.length);
+		socket.receive(packet);
+		
+		ByteBuffer bb = ByteBuffer.wrap(packet.getData());
 		Byte opcode = bb.get();
-		DatagramPacket packet = new DatagramPacket(array, array.length);
+		
 		//TODO Procesamos la respuesta para devolver la dirección que hay en ella
 		if (opcode == OPCODE_RESPONSE_CONSULTA) {
 			InetSocketAddress direction = (InetSocketAddress) packet.getSocketAddress();
