@@ -81,32 +81,25 @@ public class DirectoryThread extends Thread {
 		ByteBuffer bb = ByteBuffer.wrap(data);
 		Byte opcode = bb.get();
 		//Tenemos que coger la ip del buffer de alguna forma.
-		byte[] IP_array = new byte[4];
-		bb.get(IP_array);
-		InetAddress address = InetAddress.getByAddress(IP_array);
-		int puerto = bb.getInt();
-		
-		InetSocketAddress serverAddress = new InetSocketAddress(address, puerto); 
-		int protocol = bb.getInt();
 		switch(opcode) {
 		// 3) Procesar el caso de que sea una consulta
 			case OPCODE_CONSULTA:	
 		// 3.1) Devolver una dirección si existe un servidor (sendServerInfo)
+				int protocol = bb.getInt();
 				if (servers.containsKey(protocol)) {
-					sendServerInfo(serverAddress, clientAddr, protocol);
+					sendServerInfo(servers.get(protocol), clientAddr, protocol);
 				}
 		// 3.2) Devolver una notificación si no existe un servidor (sendEmpty)
 				else {sendEmpty(clientAddr);}
 		// 2) Procesar el caso de que sea un registro y enviar mediante sendOK
 			case OPCODE_REGISTRO:
-				if (!servers.containsKey(protocol)) {
-					servers.put(protocol, serverAddress);
-					sendOK(clientAddr);
-				}
-				else {
-					servers.put(protocol, serverAddress);
-					sendNOOK(clientAddr);
-				}
+				int protocol2 = bb.getInt();
+				int port = bb.getInt();
+				InetAddress address = clientAddr.getAddress();
+				InetSocketAddress direction = new InetSocketAddress(address, port);
+				servers.put(protocol2, direction);
+				sendOK(clientAddr);
+				
 		}
 	}
 
@@ -142,7 +135,7 @@ public class DirectoryThread extends Thread {
 		//TODO Construir respuesta
 		byte[] buf = new byte[1];
 		buf[0] = OPCODE_REGISTRO_OK;
-		DatagramPacket dp =  new DatagramPacket(buf, buf.length);
+		DatagramPacket dp =  new DatagramPacket(buf, buf.length, clientAddr);
 		//TODO Enviar respuesta
 		socket.send(dp);
 
@@ -152,7 +145,7 @@ public class DirectoryThread extends Thread {
 		//TODO Construir respuesta
 		byte[] buf = new byte[1];
 		buf[0] = OPCODE_REGISTRO_NO_OK;
-		DatagramPacket dp =  new DatagramPacket(buf, buf.length);
+		DatagramPacket dp =  new DatagramPacket(buf, buf.length, clientAddr);
 		//TODO Enviar respuesta
 		socket.send(dp);
 	}	

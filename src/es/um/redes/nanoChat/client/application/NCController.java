@@ -16,7 +16,7 @@ public class NCController {
 	private static final byte PRE_REGISTRATION = 2;
 	//Código de protocolo implementado por este cliente
 	//TODO Cambiar para cada grupo
-	private static final int PROTOCOL = 0;
+	private static final int PROTOCOL = 23300350;
 	//Conector para enviar y recibir mensajes del directorio
 	private DirectoryConnector directoryConnector;
 	//Conector para enviar y recibir mensajes con el servidor de NanoChat
@@ -206,6 +206,7 @@ public class NCController {
 		System.out.println("* Connecting to the directory...");
 		//Intentamos obtener la dirección del servidor de NanoChat que trabaja con nuestro protocolo
 		try {
+			
 			directoryConnector = new DirectoryConnector(directoryHostname);
 			serverAddress = directoryConnector.getServerForProtocol(PROTOCOL);
 		} catch (IOException e1) {

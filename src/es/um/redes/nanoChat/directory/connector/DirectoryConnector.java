@@ -85,12 +85,7 @@ public class DirectoryConnector {
 		if (opcode == OPCODE_CONSULTA_VACIA) {return null;}
 		else {
 			byte[] IP_array = new byte[4];
-			int i = 0;
-			while (i<4) {
-				byte ip = bb.get(); //Modificar
-				IP_array[i] = ip;
-				i++;
-			}
+			bb.get(IP_array);
 			int puerto = bb.getInt();
 			InetAddress address = InetAddress.getByAddress(IP_array);
 			InetSocketAddress directiontosend = new InetSocketAddress(address, puerto); 

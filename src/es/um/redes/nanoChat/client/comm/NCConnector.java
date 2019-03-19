@@ -22,8 +22,7 @@ public class NCConnector {
 	
 	public NCConnector(InetSocketAddress serverAddress) throws UnknownHostException, IOException {
 		// Se crea el socket a partir de la dirección proporcionada 
-		socket = new Socket();
-		socket.bind(serverAddress);
+		socket = new Socket(serverAddress.getAddress(), serverAddress.getPort());
 		// Se extraen los streams de entrada y salida
 		dos = new DataOutputStream(socket.getOutputStream());
 		dis = new DataInputStream(socket.getInputStream());
