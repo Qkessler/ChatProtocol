@@ -147,6 +147,7 @@ public class DirectoryThread extends Thread {
 		buf[0] = OPCODE_REGISTRO_OK;
 		DatagramPacket dp =  new DatagramPacket(buf, buf.length);
 		//TODO Enviar respuesta
+		socket.send(dp);
 
 	}
 	
