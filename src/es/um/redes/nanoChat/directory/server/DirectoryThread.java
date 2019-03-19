@@ -80,15 +80,12 @@ public class DirectoryThread extends Thread {
 		// 1) Extraemos el tipo de mensaje recibido
 		ByteBuffer bb = ByteBuffer.wrap(data);
 		Byte opcode = bb.get();
+		//Tenemos que coger la ip del buffer de alguna forma.
 		byte[] IP_array = new byte[4];
-		int i = 0;
-		while (i<4) {
-			byte ip = bb.get(); 
-			IP_array[i] = ip;
-			i++;
-		}
-		int puerto = bb.getInt();
+		bb.get(IP_array);
 		InetAddress address = InetAddress.getByAddress(IP_array);
+		int puerto = bb.getInt();
+		
 		InetSocketAddress serverAddress = new InetSocketAddress(address, puerto); 
 		int protocol = bb.getInt();
 		switch(opcode) {
