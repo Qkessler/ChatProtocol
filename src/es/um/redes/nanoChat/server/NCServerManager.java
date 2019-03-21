@@ -45,9 +45,12 @@ class NCServerManager {
 	
 	//Intenta registrar al usuario en el servidor.
 	public synchronized boolean addUser(String user) {
-		//TODO Devuelve true si no hay otro usuario con su nombre
-		//TODO Devuelve false si ya hay un usuario con su nombre
-		return true;
+		//DONE Devuelve true si no hay otro usuario con su nombre
+		if (!users.contains(user)) {
+			return true;
+		}
+		else {return false;}
+		//DONE Devuelve false si ya hay un usuario con su nombre
 	}
 	
 	//Elimina al usuario del servidor
