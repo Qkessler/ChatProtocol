@@ -12,7 +12,7 @@ public class NanoChatServer implements Runnable {
 
 	public static final int PORT = 6969;
 
-	private static final int MYPROTOCOL = 23300350;
+	private static final int MYPROTOCOL = 46610755;
 	
     private InetSocketAddress socketAddress;
     private ServerSocket serverSocket = null;

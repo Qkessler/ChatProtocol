@@ -16,7 +16,7 @@ public class NCController {
 	private static final byte PRE_REGISTRATION = 2;
 	//Código de protocolo implementado por este cliente
 	//TODO Cambiar para cada grupo
-	private static final int PROTOCOL = 23300350;
+	private static final int PROTOCOL = 46610755;
 	//Conector para enviar y recibir mensajes del directorio
 	private DirectoryConnector directoryConnector;
 	//Conector para enviar y recibir mensajes con el servidor de NanoChat
