@@ -14,6 +14,7 @@ public class NCController {
 	//Diferentes estados del cliente de acuerdo con el autómata
 	private static final byte PRE_CONNECTION = 1;
 	private static final byte PRE_REGISTRATION = 2;
+	private static final byte REGISTERED = 3;
 	//Código de protocolo implementado por este cliente
 	//TODO Cambiar para cada grupo
 	private static final int PROTOCOL = 46610755;
@@ -99,11 +100,12 @@ public class NCController {
 	private void registerNickName() {
 		try {
 			//Pedimos que se registre el nick (se comprobará si está duplicado)
-			boolean registered = ncConnector.registerNickname_UnformattedMessage(nickname);
+			boolean registered = ncConnector.registerNickname(nickname);
 			//TODO: Cambiar la llamada anterior a registerNickname() al usar mensajes formateados 
 			if (registered) {
 				//TODO Si el registro fue exitoso pasamos al siguiente estado del autómata
 				System.out.println("* Your nickname is now "+nickname);
+				clientStatus = REGISTERED;
 			}
 			else
 				//En este caso el nick ya existía
