@@ -48,6 +48,7 @@ class NCServerManager {
 		//DONE Devuelve true si no hay otro usuario con su nombre
 		if (!users.contains(user)) {
 			users.add(user);
+			
 			return true;
 		}
 		else {return false;}
