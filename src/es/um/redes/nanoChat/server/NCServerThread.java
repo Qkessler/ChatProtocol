@@ -19,6 +19,8 @@ public class NCServerThread extends Thread {
 	//Input and Output Streams
 	private DataInputStream dis;
 	private DataOutputStream dos;
+	private final static String OPCODE_OK = "Ok";
+	private final static String OPCODE_DUPLICADO = "Duplicado";
 	//Usuario actual al que atiende este Thread
 	String user;
 	//RoomManager actual (dependerá de la sala a la que entre el usuario)
@@ -71,19 +73,15 @@ public class NCServerThread extends Thread {
 	//Obtenemos el nick y solicitamos al ServerManager que verifique si está duplicado
 	private void receiveAndVerifyNickname() throws IOException {
 		//La lógica de nuestro programa nos obliga a que haya un nick registrado antes de proseguir
-	    String nickname = dis.readUTF();
 		//TODO Entramos en un bucle hasta comprobar que alguno de los nicks proporcionados no está duplicado
-	    
-	    //if (addUser(nickname) == true){
-		//dos.writeUTF("EXITO");
-		
-	    //}
-	    //else{dos.writeUTF("DUPLICADO");}
-		
-	    
-	    
-		//TODO Extraer el nick del mensaje
+	    //TODO Extraer el nick del mensaje
+		String nickname = dis.readUTF();
 		//TODO Validar el nick utilizando el ServerManager - addUser()
+		boolean nickVerification = serverManager.addUser(nickname);
+		if (nickVerification){
+			dos.writeUTF(OPCODE_OK);
+		}
+		else dos.writeUTF(OPCODE_DUPLICADO);
 		//TODO Contestar al cliente con el resultado (éxito o duplicado)
 	}
 
