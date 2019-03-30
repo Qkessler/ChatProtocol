@@ -73,9 +73,17 @@ public class NCServerThread extends Thread {
 	//Obtenemos el nick y solicitamos al ServerManager que verifique si está duplicado
 	private void receiveAndVerifyNickname() throws IOException {
 		//La lógica de nuestro programa nos obliga a que haya un nick registrado antes de proseguir
+<<<<<<< HEAD
 		//TODO Entramos en un bucle hasta comprobar que alguno de los nicks proporcionados no está duplicado
 	    //TODO Extraer el nick del mensaje
 		String nickname = dis.readUTF();
+=======
+	   
+		//TODO Entramos en un bucle hasta comprobar que alguno de los nicks proporcionados no está duplicado
+	    //TODO Extraer el nick del mensaje
+		 String nickname = dis.readUTF();
+		
+>>>>>>> ae624a69793b31d928562a373c21ef1639abda70
 		//TODO Validar el nick utilizando el ServerManager - addUser()
 		boolean nickVerification = serverManager.addUser(nickname);
 		if (nickVerification){
