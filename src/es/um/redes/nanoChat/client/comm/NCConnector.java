@@ -70,10 +70,11 @@ public class NCConnector {
 	public ArrayList<NCRoomDescription> getRooms() throws IOException {
 		//Funcionamiento resumido: SND(GET_ROOMS) and RCV(ROOM_LIST)
 		// completar el método
-		String cadenaaenviar = "GET_ROOMS";
-		dos.writeUTF(cadenaaenviar);
+		String stringGetRooms = "GET_ROOMS";
+		dos.writeUTF(stringGetRooms);
+		//va a recibir ahora un mensaje con el opcode GET_ROOMLIST, en el que esta contenida la 
+		//lista de NCRoomDescripcion.
 		return null;
-		
 	}
 	
 	//Método para solicitar la entrada en una sala

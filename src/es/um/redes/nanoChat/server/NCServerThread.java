@@ -48,7 +48,9 @@ public class NCServerThread extends Thread {
 				//TODO Obtenemos el mensaje que llega y analizamos su código de operación
 				NCMessage message = NCMessage.readMessageFromSocket(dis);
 				switch (message.getOpcode()) {
+				case '2': serverManager.getRoomList();
 				//TODO 1) si se nos pide la lista de salas se envía llamando a sendRoomList();
+					serverManager.getRoomList();
 				//TODO 2) Si se nos pide entrar en la sala entonces obtenemos el RoomManager de la sala,
 				//TODO 2) notificamos al usuario que ha sido aceptado y procesamos mensajes con processRoomMessages()
 				//TODO 2) Si el usuario no es aceptado en la sala entonces se le notifica al cliente
@@ -81,12 +83,16 @@ public class NCServerThread extends Thread {
 		if (nickVerification){
 			dos.writeUTF(OPCODE_OK);
 		}
-		else dos.writeUTF(OPCODE_DUPLICADO);
+		else {
+			dos.writeUTF(OPCODE_DUPLICADO);
+			receiveAndVerifyNickname();
+		}
 		//TODO Contestar al cliente con el resultado (éxito o duplicado)
 	}
 
 	//Mandamos al cliente la lista de salas existentes
 	private void sendRoomList()  {
+		serverManager.getRoomList();
 		//TODO La lista de salas debe obtenerse a partir del RoomManager y después enviarse mediante su mensaje correspondiente
 	}
 

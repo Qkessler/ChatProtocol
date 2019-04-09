@@ -10,7 +10,8 @@ public abstract class NCMessage {
 	//TODO Implementar el resto de los opcodes para los distintos mensajes
 	public static final byte OP_INVALID_CODE = 0;
 	public static final byte OP_NICK = 1;
-
+	public static final byte OP_GET_ROOMLIST = 2;
+	
 	//Constantes con los delimitadores de los mensajes de field:value
 	public static final char DELIMITER = ':';    //Define el delimitador
 	public static final char END_LINE = '\n';    //Define el carácter de fin de línea

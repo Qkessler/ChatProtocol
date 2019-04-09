@@ -38,8 +38,12 @@ class NCServerManager {
 	//Devuelve la descripción de las salas existentes
 	public synchronized ArrayList<NCRoomDescription> getRoomList() {
 		//TODO Pregunta a cada RoomManager cuál es la descripción actual de su sala
+		ArrayList <NCRoomDescription> arrayList = new ArrayList <NCRoomDescription>();
+		for (HashMap.Entry<String, NCRoomManager> entry : rooms.entrySet()) {
+			arrayList.add(entry.getValue().getDescription());
+		}
 		//TODO Añade la información al ArrayList
-		return null;
+		return arrayList;
 	}
 	
 	
@@ -58,20 +62,35 @@ class NCServerManager {
 	//Elimina al usuario del servidor
 	public synchronized void removeUser(String user) {
 		//TODO Elimina al usuario del servidor
+		if (users.contains(user)) {
+			users.remove(user);
+		}
 	}
 	
 	//Un usuario solicita acceso para entrar a una sala y registrar su conexión en ella
 	public synchronized NCRoomManager enterRoom(String u, String room, Socket s) {
 		//TODO Verificamos si la sala existe
+		if (rooms.containsKey(room)) {
+			return rooms.get(room);
+		}
+		else {
+			return null;
+		}
 		//TODO Decidimos qué hacer si la sala no existe (devolver error O crear la sala)
 		//TODO Si la sala existe y si es aceptado en la sala entonces devolvemos el RoomManager de la sala
-		return null;
 	}
 	
 	//Un usuario deja la sala en la que estaba 
 	public synchronized void leaveRoom(String u, String room) {
 		//TODO Verificamos si la sala existe
+		if (rooms.containsKey(room)) {
+			rooms.get(room).getDescription().members.remove(u);
+		}
 		//TODO Si la sala existe sacamos al usuario de la sala
+		
+		//Hemos decidido que bajo la condición de que la sala esté vacía, 
+		//no vamos a hacer nada, vamos a trabajar con salas vacías.
+		
 		//TODO Decidir qué hacer si la sala se queda vacía
 	}
 }
