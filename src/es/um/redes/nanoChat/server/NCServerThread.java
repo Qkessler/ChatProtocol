@@ -5,7 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-import es.um.redes.nanoChat.messageML.NCMessage;
+import es.um.redes.nanoChat.messageFV.NCMessage;
 import es.um.redes.nanoChat.server.roomManager.NCRoomManager;
 
 /**

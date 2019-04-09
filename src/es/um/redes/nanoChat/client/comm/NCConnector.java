@@ -10,8 +10,8 @@ import java.net.UnknownHostException;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 
-import es.um.redes.nanoChat.messageML.NCMessage;
-import es.um.redes.nanoChat.messageML.NCRoomMessage;
+import es.um.redes.nanoChat.messageFV.NCMessage;
+import es.um.redes.nanoChat.messageFV.NCRoomMessage;
 import es.um.redes.nanoChat.server.roomManager.NCRoomDescription;
 
 //Esta clase proporciona la funcionalidad necesaria para intercambiar mensajes entre el cliente y el servidor de NanoChat
@@ -80,6 +80,7 @@ public class NCConnector {
 	//Método para solicitar la entrada en una sala
 	public boolean enterRoom(String room) throws IOException {
 		//Funcionamiento resumido: SND(ENTER_ROOM<room>) and RCV(IN_ROOM) or RCV(REJECT)
+		NCRoomMessage enterRoomMessage = (NCRoomMessage) NCMessage.makeRoomMessage(NCMessage.OP_ENTER_ROOM, room);
 		//TODO completar el método
 		return true;
 	}
