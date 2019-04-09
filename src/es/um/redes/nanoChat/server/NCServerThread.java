@@ -92,6 +92,7 @@ public class NCServerThread extends Thread {
 
 	//Mandamos al cliente la lista de salas existentes
 	private void sendRoomList()  {
+
 		serverManager.getRoomList();
 		//TODO La lista de salas debe obtenerse a partir del RoomManager y después enviarse mediante su mensaje correspondiente
 	}

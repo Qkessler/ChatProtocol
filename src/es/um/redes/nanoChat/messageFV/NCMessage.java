@@ -11,6 +11,11 @@ public abstract class NCMessage {
 	public static final byte OP_INVALID_CODE = 0;
 	public static final byte OP_NICK = 1;
 	public static final byte OP_GET_ROOMLIST = 2;
+	public static final byte OP_ENTER_ROOM = 3;
+	public static final byte OP_LEAVE_ROOM = 4;
+	/*public static final byte OP_GET_ROOMLIST = 2;
+	public static final byte OP_GET_ROOMLIST = 2;*/
+	
 	
 	//Constantes con los delimitadores de los mensajes de field:value
 	public static final char DELIMITER = ':';    //Define el delimitador
@@ -24,14 +29,14 @@ public abstract class NCMessage {
 	 * que aparece en los mensajes
 	 */
 	private static final Byte[] _valid_opcodes = { 
-		OP_NICK
+		OP_NICK, OP_GET_ROOMLIST, OP_ENTER_ROOM, OP_LEAVE_ROOM
 		};
 
 	/**
 	 * cadena exacta de cada orden
 	 */
 	private static final String[] _valid_operations = {
-		"Nick"
+		"Nick", "getRoomList", "enterRoom", "leaveRoom"
 		};
 
 	/**
