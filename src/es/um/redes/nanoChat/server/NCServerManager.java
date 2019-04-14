@@ -21,7 +21,7 @@ class NCServerManager {
 	//Usuarios registrados en el servidor
 	private HashSet<String> users = new HashSet<String>();
 	//Habitaciones actuales asociadas a sus correspondientes RoomManagers
-	private HashMap<String,NCRoomManager> rooms = new HashMap<String,NCRoomManager>();
+	public HashMap<String,NCRoomManager> rooms = new HashMap<String,NCRoomManager>();
 	
 	NCServerManager() {
 		nextRoom = INITIAL_ROOM;
