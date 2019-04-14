@@ -17,10 +17,8 @@ public abstract class NCRoomManager {
 	public abstract void setRoomName(String roomName);
 	//Método para devolver la descripción del estado actual de la sala
 	public abstract NCRoomDescription getDescription();
-	
-	//Método para devolver la lista de las salas.
+	//Método para devolver la lista de las salas AÑADIDO POR NOSOTROS.
 	public abstract ArrayList<NCRoomDescription> getRoomList();
-	
 	//Método para devolver el número de usuarios conectados a una sala
 	public abstract int usersInRoom();
 	
