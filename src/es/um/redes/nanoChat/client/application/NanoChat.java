@@ -23,7 +23,9 @@ public class NanoChat {
 				// hasta que el usuario quiera salir de la aplicación.
 				do {
 					controller.readGeneralCommandFromShell();
-					controller.processCommand();
+					try {
+						controller.processCommand();
+					} catch (IOException e) {}
 				} while (controller.shouldQuit() == false);
 			}
 			else

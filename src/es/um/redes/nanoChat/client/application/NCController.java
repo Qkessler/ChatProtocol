@@ -15,6 +15,7 @@ public class NCController {
 	private static final byte PRE_CONNECTION = 1;
 	private static final byte PRE_REGISTRATION = 2;
 	private static final byte REGISTERED = 3;
+	private static final byte IN_ROOM = 4;
 	//Código de protocolo implementado por este cliente
 	//TODO Cambiar para cada grupo
 	private static final int PROTOCOL = 46610755;
@@ -71,20 +72,35 @@ public class NCController {
 	}
 
 	//Procesa los comandos introducidos por un usuario que aún no está dentro de una sala
-	public void processCommand() {
+	public void processCommand() throws IOException {
 		switch (currentCommand) {
 		case NCCommands.COM_NICK:
-			if (clientStatus == PRE_REGISTRATION)
+			if (clientStatus == PRE_REGISTRATION) {
 				registerNickName();
+				clientStatus = REGISTERED;
+			}
 			else
 				System.out.println("* You have already registered a nickname ("+nickname+")");
 			break;
 		case NCCommands.COM_ROOMLIST:
+			if (clientStatus == REGISTERED) {
+				getAndShowRooms();
+			}
+			else {
+				System.out.println("* You have to be registered to see rooms.");
+			}
 			//TODO LLamar a getAndShowRooms() si el estado actual del autómata lo permite
 			//TODO Si no está permitido informar al usuario
 			break;
 		case NCCommands.COM_ENTER:
 			//TODO LLamar a enterChat() si el estado actual del autómata lo permite
+			if (clientStatus != IN_ROOM) {
+				enterChat();
+				clientStatus = IN_ROOM;
+			}
+			else {
+				System.out.println("* Can't get in a room if you are already in one.");
+			}
 			//TODO Si no está permitido informar al usuario
 			break;
 		case NCCommands.COM_QUIT:
@@ -107,33 +123,49 @@ public class NCController {
 				System.out.println("* Your nickname is now "+nickname);
 				clientStatus = REGISTERED;
 			}
-			else
+			else {
 				//En este caso el nick ya existía
-				System.out.println("* The nickname is already registered. Try a different one.");			
+				System.out.println("* The nickname is already registered. Try a different one.");
+				clientStatus = PRE_REGISTRATION;
+			}
 		} catch (IOException e) {
 			System.out.println("* There was an error registering the nickname");
 		}
 	}
 
 	//Método que solicita al servidor de NanoChat la lista de salas e imprime el resultado obtenido
-	private void getAndShowRooms() {
+	private void getAndShowRooms() throws IOException {
 		//TODO Lista que contendrá las descripciones de las salas existentes
 		//TODO Le pedimos al conector que obtenga la lista de salas ncConnector.getRooms()
+		 ArrayList<NCRoomDescription> listaSalas = ncConnector.getRooms();
+		 for(NCRoomDescription elem : listaSalas) {
+			 System.out.println(elem);
+		 }
 		//TODO Una vez recibidas iteramos sobre la lista para imprimir información de cada sala
 	}
 
 	//Método para tramitar la solicitud de acceso del usuario a una sala concreta
-	private void enterChat() {
+	private void enterChat() throws IOException {
 		//TODO Se solicita al servidor la entrada en la sala correspondiente ncConnector.enterRoom()
+		boolean booleanoEntrada = ncConnector.enterRoom(room);
+		if (booleanoEntrada == false) {
+			System.out.println("* Couldn't get in the room, try again.");
+		}
+		else {
+			System.out.println("* You are in the room, be kind to people.");
+			clientStatus = IN_ROOM;
+			do {
+				//Pasamos a aceptar sólo los comandos que son válidos dentro de una sala
+				readRoomCommandFromShell();
+				processRoomCommand();
+			} while (currentCommand != NCCommands.COM_EXIT);
+		}
 		//TODO Si la respuesta es un rechazo entonces informamos al usuario y salimos
 		//TODO En caso contrario informamos que estamos dentro y seguimos
 		//TODO Cambiamos el estado del autómata para aceptar nuevos comandos
-		do {
-			//Pasamos a aceptar sólo los comandos que son válidos dentro de una sala
-			readRoomCommandFromShell();
-			processRoomCommand();
-		} while (currentCommand != NCCommands.COM_EXIT);
+		
 		System.out.println("* Your are out of the room");
+		clientStatus = REGISTERED;
 		//TODO Llegados a este punto el usuario ha querido salir de la sala, cambiamos el estado del autómata
 	}
 
