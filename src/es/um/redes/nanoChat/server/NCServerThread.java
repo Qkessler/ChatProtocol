@@ -59,6 +59,9 @@ public class NCServerThread extends Thread {
 						NCRoomMessage roomMessage = (NCRoomMessage)message;
 						String nombreSala = roomMessage.getName();
 						NCRoomManager roomManagerSala = serverManager.rooms.get(nombreSala);
+						String aceptadoString = "ACEPTADO";
+						dos.writeUTF(aceptadoString);
+						processRoomMessages();
 						
 						
 				
@@ -110,6 +113,7 @@ public class NCServerThread extends Thread {
 		boolean exit = false;
 		while (!exit) {
 			//TODO Se recibe el mensaje enviado por el usuario
+			NCMessage 
 			//TODO Se analiza el código de operación del mensaje y se trata en consecuencia
 		}
 	}
