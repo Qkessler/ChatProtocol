@@ -103,6 +103,10 @@ public class NCConnector {
 	public NCRoomDescription getRoomInfo(String room) throws IOException {
 		//Funcionamiento resumido: SND(GET_ROOMINFO) and RCV(ROOMINFO)
 		//TODO Construimos el mensaje de solicitud de información de la sala específica
+		NCRoomMessage messageEnviado = (NCRoomMessage) NCMessage.makeRoomMessage(NCMessage.OP_GET_ROOMINFO, room);
+		String messageToString = messageEnviado.toEncodedString();
+		dos.writeUTF(messageToString);
+		String messageRecibido = dis.readUTF();
 		//TODO Recibimos el mensaje de respuesta
 		//TODO Devolvemos la descripción contenida en el mensaje
 		return null;
