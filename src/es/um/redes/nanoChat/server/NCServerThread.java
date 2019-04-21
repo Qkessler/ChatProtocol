@@ -113,7 +113,6 @@ public class NCServerThread extends Thread {
 		boolean exit = false;
 		while (!exit) {
 			//TODO Se recibe el mensaje enviado por el usuario
-			NCMessage 
 			//TODO Se analiza el código de operación del mensaje y se trata en consecuencia
 		}
 	}
