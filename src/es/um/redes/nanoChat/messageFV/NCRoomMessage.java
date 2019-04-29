@@ -27,7 +27,7 @@ public class NCRoomMessage extends NCMessage {
 		this.name = name;
 	}
 
-	//Pasamos los campos del mensaje a la codificación correcta en field:value
+	//Parseamos los campos del mensaje a la codificación correcta en field:value
 	@Override
 	public String toEncodedString() {
 		StringBuffer sb = new StringBuffer();			

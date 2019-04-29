@@ -2,6 +2,9 @@ package es.um.redes.nanoChat.messageFV;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+
+import es.um.redes.nanoChat.server.roomManager.NCRoomDescription;
 
 
 public abstract class NCMessage {
@@ -93,6 +96,9 @@ public abstract class NCMessage {
 			{
 				return NCRoomMessage.readFromString(code, message);
 			}
+			case OP_GET_ROOMLIST:{
+				return NCRoomListMessage.readFromString(code, message);
+			}
 			default:
 				System.err.println("Unknown message type received:" + code);
 				return null;
@@ -101,8 +107,15 @@ public abstract class NCMessage {
 			return null;
 	}
 
+	public static NCMessage makeOpcodeMessage(byte code) {
+		return (new NCOpcodeMessage(code));
+	}
 	//Método para construir un mensaje de tipo Room a partir del opcode y del nombre
 	public static NCMessage makeRoomMessage(byte code, String name) {
 		return (new NCRoomMessage(code, name));
+	}
+	
+	public static NCMessage makeRoomListMessage(byte opcode, int roomListlength, ArrayList<NCRoomDescription> roomList) {
+		return (new NCRoomListMessage(opcode, roomListlength, roomList));
 	}
 }

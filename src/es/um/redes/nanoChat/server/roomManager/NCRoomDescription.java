@@ -32,4 +32,25 @@ public class NCRoomDescription {
 			sb.append("\tLast message: not yet");
 		return sb.toString();
 	}
+	
+	public static NCRoomDescription fromStringtoNCRoomDescription(String message) {
+		ArrayList<String> miembros = new ArrayList<String>();
+		String[] lines = message.split(System.getProperty("line.separator"));
+		int idxt = lines[1].indexOf("\t");
+		int idx = lines[1].indexOf(":");
+		int idxp1 = lines[1].indexOf("(");
+		int idxp2 = lines[1].indexOf(")");
+		String fieldRoomName = lines[1].substring(0, idx);
+		String valueRoomName = lines[1].substring(idx+1, idxt);
+		String membersfield = lines[1].substring(idxt+1, idxp1);
+		String sizevalue = lines[1].substring(idxp1+1, idxp2);
+		for(int i = 0; i < Integer.parseInt(sizevalue); i++) {
+			miembros.add(lines[1].substring(idx+2, idxt+1));
+		}
+		String fieldLastMessage = lines[1].substring(idxt+2, idx+3);
+		String valueLastMessage = lines[1].substring(idx+3);
+		long time = Long.parseLong(valueLastMessage);
+		return new NCRoomDescription(valueRoomName, miembros, time);
+		
+	}
 }

@@ -10,7 +10,10 @@ import java.net.UnknownHostException;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 
+import es.um.redes.nanoChat.messageFV.NCInfoMessage;
 import es.um.redes.nanoChat.messageFV.NCMessage;
+import es.um.redes.nanoChat.messageFV.NCOpcodeMessage;
+import es.um.redes.nanoChat.messageFV.NCRoomListMessage;
 import es.um.redes.nanoChat.messageFV.NCRoomMessage;
 import es.um.redes.nanoChat.server.roomManager.NCRoomDescription;
 
@@ -59,7 +62,7 @@ public class NCConnector {
 		// Leemos el mensaje recibido como respuesta por el flujo de entrada 
 		String cadena = dis.readUTF();
 		// Analizamos el mensaje para saber si está duplicado el nick (modificar el return en consecuencia)
-		if (cadena == "NICK_DUPLICATED") {
+		if (cadena.equals("NICK_DUPLICATED")) {
 			System.out.println("El nick está duplicado");
 			return false;
 		}
@@ -70,19 +73,29 @@ public class NCConnector {
 	public ArrayList<NCRoomDescription> getRooms() throws IOException {
 		//Funcionamiento resumido: SND(GET_ROOMS) and RCV(ROOM_LIST)
 		// completar el método
-		String stringGetRooms = "GET_ROOMS";
-		dos.writeUTF(stringGetRooms);
+		NCOpcodeMessage message = (NCOpcodeMessage) NCMessage.makeOpcodeMessage(NCMessage.OP_GET_ROOMLIST);
+		String rawMessage = message.toEncodedString();
+		dos.writeUTF(rawMessage);
+		NCRoomListMessage roomList = (NCRoomListMessage)NCMessage.readMessageFromSocket(dis);
+		return roomList.getRoomList();	
 		//va a recibir ahora un mensaje con el opcode GET_ROOMLIST, en el que esta contenida la 
 		//lista de NCRoomDescripcion.
-		return null;
+
 	}
 	
 	//Método para solicitar la entrada en una sala
 	public boolean enterRoom(String room) throws IOException {
 		//Funcionamiento resumido: SND(ENTER_ROOM<room>) and RCV(IN_ROOM) or RCV(REJECT)
 		NCRoomMessage enterRoomMessage = (NCRoomMessage) NCMessage.makeRoomMessage(NCMessage.OP_ENTER_ROOM, room);
+		String raw = enterRoomMessage.toEncodedString();
+		dos.writeUTF(raw);
+		String response = dis.readUTF();
+		if (response  == "IN_ROOM") {
+			return true;
+		}
+		else return false;
 		//TODO completar el método
-		return true;
+		
 	}
 	
 	//Método para salir de una sala
@@ -106,10 +119,11 @@ public class NCConnector {
 		NCRoomMessage messageEnviado = (NCRoomMessage) NCMessage.makeRoomMessage(NCMessage.OP_GET_ROOMINFO, room);
 		String messageToString = messageEnviado.toEncodedString();
 		dos.writeUTF(messageToString);
-		String messageRecibido = dis.readUTF();
+		NCInfoMessage message = (NCInfoMessage)NCMessage.readMessageFromSocket(dis);
+		NCRoomDescription descripcion = message.getDescripcion();
 		//TODO Recibimos el mensaje de respuesta
 		//TODO Devolvemos la descripción contenida en el mensaje
-		return null;
+		return descripcion;
 	}
 	
 	//Método para cerrar la comunicación con la sala

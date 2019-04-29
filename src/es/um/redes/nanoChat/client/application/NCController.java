@@ -16,6 +16,7 @@ public class NCController {
 	private static final byte PRE_REGISTRATION = 2;
 	private static final byte REGISTERED = 3;
 	private static final byte IN_ROOM = 4;
+	private static final byte KNOWS_ROOMS = 5;
 	//Código de protocolo implementado por este cliente
 	//TODO Cambiar para cada grupo
 	private static final int PROTOCOL = 46610755;
@@ -85,6 +86,7 @@ public class NCController {
 		case NCCommands.COM_ROOMLIST:
 			if (clientStatus == REGISTERED) {
 				getAndShowRooms();
+				clientStatus = KNOWS_ROOMS;
 			}
 			else {
 				System.out.println("* You have to be registered to see rooms.");
@@ -94,12 +96,15 @@ public class NCController {
 			break;
 		case NCCommands.COM_ENTER:
 			//TODO LLamar a enterChat() si el estado actual del autómata lo permite
-			if (clientStatus != IN_ROOM) {
+			if (clientStatus == KNOWS_ROOMS) {
 				enterChat();
 				clientStatus = IN_ROOM;
 			}
-			else {
+			else if (clientStatus == IN_ROOM){
 				System.out.println("* Can't get in a room if you are already in one.");
+			}
+			else {
+				System.out.println("* Have to ask for roomList before getting in a room.");
 			}
 			//TODO Si no está permitido informar al usuario
 			break;
@@ -139,7 +144,7 @@ public class NCController {
 		//TODO Le pedimos al conector que obtenga la lista de salas ncConnector.getRooms()
 		 ArrayList<NCRoomDescription> listaSalas = ncConnector.getRooms();
 		 for(NCRoomDescription elem : listaSalas) {
-			 System.out.println(elem);
+			 System.out.println(elem.toPrintableString());
 		 }
 		//TODO Una vez recibidas iteramos sobre la lista para imprimir información de cada sala
 	}
@@ -201,13 +206,15 @@ public class NCController {
 	//Método para notificar al servidor que salimos de la sala
 	private void exitTheRoom() {
 		//TODO Mandamos al servidor el mensaje de salida
-		clientStatus = REGISTERED;
+		clientStatus = KNOWS_ROOMS;
 		//TODO Cambiamos el estado del autómata para indicar que estamos fuera de la sala
 	}
 
 	//Método para enviar un mensaje al chat de la sala
 	private void sendChatMessage() {
 		//TODO Mandamos al servidor un mensaje de chat
+		
+		
 	}
 
 	//Método para procesar los mensajes recibidos del servidor mientras que el shell estaba esperando un comando de usuario

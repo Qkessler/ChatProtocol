@@ -4,9 +4,12 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import es.um.redes.nanoChat.messageFV.NCMessage;
+import es.um.redes.nanoChat.messageFV.NCRoomListMessage;
 import es.um.redes.nanoChat.messageFV.NCRoomMessage;
+import es.um.redes.nanoChat.server.roomManager.NCRoomDescription;
 import es.um.redes.nanoChat.server.roomManager.NCRoomManager;
 
 /**
@@ -102,9 +105,12 @@ public class NCServerThread extends Thread {
 	}
 
 	//Mandamos al cliente la lista de salas existentes
-	private void sendRoomList()  {
+	private void sendRoomList() throws IOException  {
 
-		serverManager.getRoomList();
+		ArrayList<NCRoomDescription> roomList = roomManager.getRoomList();
+		NCRoomListMessage message = new NCRoomListMessage((byte)2, (int)roomList.size(), roomList);
+		String stringmessage = message.toEncodedString();
+		dos.writeUTF(stringmessage);
 		//TODO La lista de salas debe obtenerse a partir del RoomManager y después enviarse mediante su mensaje correspondiente
 	}
 
