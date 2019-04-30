@@ -169,8 +169,7 @@ public class NCController {
 		//TODO En caso contrario informamos que estamos dentro y seguimos
 		//TODO Cambiamos el estado del autómata para aceptar nuevos comandos
 		
-		System.out.println("* Your are out of the room");
-		clientStatus = REGISTERED;
+		exitTheRoom();
 		//TODO Llegados a este punto el usuario ha querido salir de la sala, cambiamos el estado del autómata
 	}
 
@@ -206,6 +205,7 @@ public class NCController {
 	//Método para notificar al servidor que salimos de la sala
 	private void exitTheRoom() {
 		//TODO Mandamos al servidor el mensaje de salida
+		System.out.println("* You are out of the room.");
 		clientStatus = KNOWS_ROOMS;
 		//TODO Cambiamos el estado del autómata para indicar que estamos fuera de la sala
 	}
