@@ -40,7 +40,7 @@ public class NCRoomListMessage extends NCMessage {
 		if (fieldLongitud.equalsIgnoreCase("Longitud")) {
 			longitud = Integer.parseInt(valueLongitud);
 		}
-		String fieldRoomlist = lines[2].substring(idx+2).toLowerCase();
+		String fieldRoomlist = lines[2].substring(0, DELIMITER).toLowerCase();
 		ArrayList<NCRoomDescription> array = new ArrayList<NCRoomDescription>();
 		for (int i = 0; i < longitud; i++) {
 			

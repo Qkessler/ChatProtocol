@@ -14,6 +14,7 @@ public abstract class NCMessage {
 	public static final byte OP_INVALID_CODE = 0;
 	public static final byte OP_NICK = 1;
 	public static final byte OP_GET_ROOMLIST = 2;
+	public static final byte OP_SEND_ROOMLIST = 7;
 	public static final byte OP_ENTER_ROOM = 3;
 	public static final byte OP_LEAVE_ROOM = 4;
 	public static final byte OP_REMOVE_USER = 5;
@@ -31,14 +32,14 @@ public abstract class NCMessage {
 	 * que aparece en los mensajes
 	 */
 	private static final Byte[] _valid_opcodes = { 
-		OP_NICK, OP_GET_ROOMLIST, OP_ENTER_ROOM, OP_LEAVE_ROOM, OP_REMOVE_USER, OP_GET_ROOMINFO
+		OP_NICK, OP_GET_ROOMLIST, OP_SEND_ROOMLIST, OP_ENTER_ROOM, OP_LEAVE_ROOM, OP_REMOVE_USER, OP_GET_ROOMINFO
 		};
 
 	/**
 	 * cadena exacta de cada orden
 	 */
 	private static final String[] _valid_operations = {
-		"Nick", "getRoomList", "enterRoom", "leaveRoom", "removeUser", "getRoomInfo"
+		"Nick", "getRoomList", "sendRoomList","enterRoom", "leaveRoom", "removeUser", "getRoomInfo"
 		};
 
 	/**
@@ -86,7 +87,8 @@ public abstract class NCMessage {
 		String[] lines = message.split(System.getProperty("line.separator"));
 		if (!lines[0].equals("")) { // Si la línea no está vacía
 			int idx = lines[0].indexOf(DELIMITER); // Posición del delimitador
-			String field = lines[0].substring(0, idx).toLowerCase(); 																		// minúsculas
+			String field = lines[0].substring(0, idx).toLowerCase(); 			
+			System.out.println(field);// minúsculas
 			String value = lines[0].substring(idx + 1).trim();
 			if (!field.equalsIgnoreCase(OPCODE_FIELD)) return null;
 			byte code = operationToOpcode(value);
@@ -97,6 +99,9 @@ public abstract class NCMessage {
 				return NCRoomMessage.readFromString(code, message);
 			}
 			case OP_GET_ROOMLIST:{
+				return new NCOpcodeMessage(code);
+			}
+			case OP_SEND_ROOMLIST:{
 				return NCRoomListMessage.readFromString(code, message);
 			}
 			default:

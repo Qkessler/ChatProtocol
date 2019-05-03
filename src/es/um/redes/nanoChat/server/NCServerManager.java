@@ -32,15 +32,16 @@ class NCServerManager {
 		//TODO Dar soporte para que pueda haber más de una sala en el servidor
 		String roomName = ROOM_PREFIX + (char) nextRoom; 
 		rooms.put(roomName, rm);
-		rm.setRoomName(roomName);
 	}
 	
 	//Devuelve la descripción de las salas existentes
 	public synchronized ArrayList<NCRoomDescription> getRoomList() {
 		//TODO Pregunta a cada RoomManager cuál es la descripción actual de su sala
 		ArrayList <NCRoomDescription> arrayList = new ArrayList <NCRoomDescription>();
-		for (HashMap.Entry<String, NCRoomManager> entry : rooms.entrySet()) {
-			arrayList.add(entry.getValue().getDescription());
+		for (NCRoomManager roommanager : rooms.values()) {
+			System.out.println(roommanager.getDescription().toPrintableString());
+			arrayList.add(roommanager.getDescription());
+			
 		}
 		//TODO Añade la información al ArrayList
 		return arrayList;

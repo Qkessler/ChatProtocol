@@ -6,6 +6,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import es.um.redes.nanoChat.directory.connector.DirectoryConnector;
+import es.um.redes.nanoChat.server.roomManager.NCRoomManager;
+import es.um.redes.nanoChat.server.roomManager.RoomManagerSubclase;
 
 
 public class NanoChatServer implements Runnable {
@@ -37,7 +39,8 @@ public class NanoChatServer implements Runnable {
     	//Manager del servidor (compartido entre los Thread)
     	manager = new NCServerManager();
     	//TODO Registramos una sala de chat en el servidor (subclase de NCRoomManager)
-    	//TODO manager.registerRoomManager();
+    	NCRoomManager roomManager = new RoomManagerSubclase();
+    	manager.registerRoomManager(roomManager);
     }
 
 

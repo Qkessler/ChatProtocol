@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import es.um.redes.nanoChat.messageFV.NCMessage;
+import es.um.redes.nanoChat.messageFV.NCOpcodeMessage;
 import es.um.redes.nanoChat.messageFV.NCRoomListMessage;
 import es.um.redes.nanoChat.messageFV.NCRoomMessage;
 import es.um.redes.nanoChat.server.roomManager.NCRoomDescription;
@@ -51,21 +52,25 @@ public class NCServerThread extends Thread {
 			while (true) {
 				//TODO Obtenemos el mensaje que llega y analizamos su código de operación
 				NCMessage message = NCMessage.readMessageFromSocket(dis);
+				
 				switch (message.getOpcode()) {
 				//TODO 1) si se nos pide la lista de salas se envía llamando a sendRoomList();
-					case '2': 
+					case NCMessage.OP_GET_ROOMLIST:
+						System.out.println("12");
 						sendRoomList();
+						System.out.println("as");
+						break;
 				//TODO 2) Si se nos pide entrar en la sala entonces obtenemos el RoomManager de la sala,
 				//TODO 2) notificamos al usuario que ha sido aceptado y procesamos mensajes con processRoomMessages()
 				//TODO 2) Si el usuario no es aceptado en la sala entonces se le notifica al cliente
-					case '3':
+					case NCMessage.OP_GET_ROOMINFO:
 						NCRoomMessage roomMessage = (NCRoomMessage)message;
 						String nombreSala = roomMessage.getName();
 						NCRoomManager roomManagerSala = serverManager.rooms.get(nombreSala);
 						String aceptadoString = "ACEPTADO";
 						dos.writeUTF(aceptadoString);
 						processRoomMessages();
-						
+						break;
 						
 				
 				}
@@ -107,9 +112,11 @@ public class NCServerThread extends Thread {
 	//Mandamos al cliente la lista de salas existentes
 	private void sendRoomList() throws IOException  {
 
-		ArrayList<NCRoomDescription> roomList = roomManager.getRoomList();
-		NCRoomListMessage message = new NCRoomListMessage((byte)2, (int)roomList.size(), roomList);
+		ArrayList<NCRoomDescription> roomList = serverManager.getRoomList();
+		System.out.println(roomList.size());
+		NCRoomListMessage message = new NCRoomListMessage(NCMessage.OP_SEND_ROOMLIST, roomList.size(), roomList);
 		String stringmessage = message.toEncodedString();
+		System.out.println(stringmessage);
 		dos.writeUTF(stringmessage);
 		//TODO La lista de salas debe obtenerse a partir del RoomManager y después enviarse mediante su mensaje correspondiente
 	}
