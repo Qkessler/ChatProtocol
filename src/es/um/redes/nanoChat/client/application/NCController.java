@@ -78,7 +78,6 @@ public class NCController {
 		case NCCommands.COM_NICK:
 			if (clientStatus == PRE_REGISTRATION) {
 				registerNickName();
-				clientStatus = REGISTERED;
 			}
 			else
 				System.out.println("* You have already registered a nickname ("+nickname+")");
@@ -86,7 +85,6 @@ public class NCController {
 		case NCCommands.COM_ROOMLIST:
 			if (clientStatus == REGISTERED) {
 				getAndShowRooms();
-				clientStatus = KNOWS_ROOMS;
 			}
 			else {
 				System.out.println("* You have to be registered to see rooms.");
@@ -142,10 +140,11 @@ public class NCController {
 	private void getAndShowRooms() throws IOException {
 		//TODO Lista que contendrá las descripciones de las salas existentes
 		//TODO Le pedimos al conector que obtenga la lista de salas ncConnector.getRooms()
-		 ArrayList<NCRoomDescription> listaSalas = ncConnector.getRooms();
-		 for(NCRoomDescription elem : listaSalas) {
-			 System.out.println(elem.toPrintableString());
-		 }
+		ArrayList<NCRoomDescription> listaSalas = ncConnector.getRooms();
+		clientStatus = KNOWS_ROOMS;
+		for(NCRoomDescription elem : listaSalas) {
+			System.out.println(elem.toPrintableString());
+		}
 		//TODO Una vez recibidas iteramos sobre la lista para imprimir información de cada sala
 	}
 

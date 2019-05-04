@@ -19,7 +19,8 @@ public abstract class NCMessage {
 	public static final byte OP_LEAVE_ROOM = 4;
 	public static final byte OP_REMOVE_USER = 5;
 	public static final byte OP_GET_ROOMINFO = 6;
-	
+	public static final byte OP_NICK_OK = 8;
+	public static final byte OP_NICK_DUPLICADO = 9;
 	//Constantes con los delimitadores de los mensajes de field:value
 	public static final char DELIMITER = ':';    //Define el delimitador
 	public static final char END_LINE = '\n';    //Define el carácter de fin de línea
@@ -32,14 +33,14 @@ public abstract class NCMessage {
 	 * que aparece en los mensajes
 	 */
 	private static final Byte[] _valid_opcodes = { 
-		OP_NICK, OP_GET_ROOMLIST, OP_SEND_ROOMLIST, OP_ENTER_ROOM, OP_LEAVE_ROOM, OP_REMOVE_USER, OP_GET_ROOMINFO
+		OP_NICK, OP_NICK_OK, OP_NICK_DUPLICADO, OP_GET_ROOMLIST, OP_SEND_ROOMLIST, OP_ENTER_ROOM, OP_LEAVE_ROOM, OP_REMOVE_USER, OP_GET_ROOMINFO
 		};
 
 	/**
 	 * cadena exacta de cada orden
 	 */
 	private static final String[] _valid_operations = {
-		"Nick", "getRoomList", "sendRoomList","enterRoom", "leaveRoom", "removeUser", "getRoomInfo"
+		"Nick", "Nick_OK", "Nick_DUPLICATED", "getRoomList", "sendRoomList","enterRoom", "leaveRoom", "removeUser", "getRoomInfo"
 		};
 
 	/**
@@ -88,7 +89,6 @@ public abstract class NCMessage {
 		if (!lines[0].equals("")) { // Si la línea no está vacía
 			int idx = lines[0].indexOf(DELIMITER); // Posición del delimitador
 			String field = lines[0].substring(0, idx).toLowerCase(); 			
-			System.out.println(field);// minúsculas
 			String value = lines[0].substring(idx + 1).trim();
 			if (!field.equalsIgnoreCase(OPCODE_FIELD)) return null;
 			byte code = operationToOpcode(value);
@@ -98,10 +98,20 @@ public abstract class NCMessage {
 			{
 				return NCRoomMessage.readFromString(code, message);
 			}
-			case OP_GET_ROOMLIST:{
+			case OP_NICK_OK:
+			{
+				return NCOpcodeMessage.readFromString(code);
+			}
+			case OP_NICK_DUPLICADO:
+			{
+				return NCOpcodeMessage.readFromString(code);
+			}
+			case OP_GET_ROOMLIST:
+			{
 				return new NCOpcodeMessage(code);
 			}
-			case OP_SEND_ROOMLIST:{
+			case OP_SEND_ROOMLIST:
+			{
 				return NCRoomListMessage.readFromString(code, message);
 			}
 			default:
@@ -120,7 +130,7 @@ public abstract class NCMessage {
 		return (new NCRoomMessage(code, name));
 	}
 	
-	public static NCMessage makeRoomListMessage(byte opcode, int roomListlength, ArrayList<NCRoomDescription> roomList) {
-		return (new NCRoomListMessage(opcode, roomListlength, roomList));
+	public static NCMessage makeRoomListMessage(byte opcode, ArrayList<NCRoomDescription> roomList) {
+		return (new NCRoomListMessage(opcode, roomList));
 	}
 }

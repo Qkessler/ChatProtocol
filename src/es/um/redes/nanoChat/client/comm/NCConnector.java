@@ -30,25 +30,6 @@ public class NCConnector {
 		dos = new DataOutputStream(socket.getOutputStream());
 		dis = new DataInputStream(socket.getInputStream());
 	}
-
-
-	//Método para registrar el nick en el servidor. Nos informa sobre si la inscripción se hizo con éxito o no.
-	public boolean registerNickname_UnformattedMessage(String nick) throws IOException {
-		//Funcionamiento resumido: SEND(nick) and RCV(NICK_OK) or RCV(NICK_DUPLICATED)
-		// Enviamos una cadena con el nick por el flujo de salida
-		DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-		String cadena = "texto";
-		dos.writeUTF(cadena);
-		// Leemos la cadena recibida como respuesta por el flujo de entrada 
-		DataInputStream dis = new DataInputStream(socket.getInputStream());
-		String cadenarecibida = dis.readUTF();
-		// Si la cadena recibida es NICK_OK entonces no está duplicado (en función de ello modificar el return)
-		if (cadenarecibida == "NICK_OK") {
-			return true;
-		}
-		else {return false;}
-	}
-
 	
 	//Método para registrar el nick en el servidor. Nos informa sobre si la inscripción se hizo con éxito o no.
 	public boolean registerNickname(String nick) throws IOException {
@@ -60,13 +41,13 @@ public class NCConnector {
 		//Escribimos el mensaje en el flujo de salida, es decir, provocamos que se envíe por la conexión TCP
 		dos.writeUTF(rawMessage);
 		// Leemos el mensaje recibido como respuesta por el flujo de entrada 
-		String cadena = dis.readUTF();
-		// Analizamos el mensaje para saber si está duplicado el nick (modificar el return en consecuencia)
-		if (cadena.equals("NICK_DUPLICATED")) {
-			System.out.println("El nick está duplicado");
-			return false;
+		NCOpcodeMessage messageRespuesta = (NCOpcodeMessage)NCMessage.readMessageFromSocket(dis);
+		if(messageRespuesta.getOpcode() == NCMessage.OP_NICK_OK) {
+			return true;
 		}
-		else {return true;}
+		else return false;
+		// Analizamos el mensaje para saber si está duplicado el nick (modificar el return en consecuencia)
+		
 	}
 	
 	//Método para obtener la lista de salas del servidor

@@ -6,18 +6,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class RoomManagerSubclase extends NCRoomManager{
-	private HashMap<String, Socket> miembros;
+	private HashMap<String, Socket> miembros = new HashMap<String, Socket>();
 	private long tiempoUltimoMensaje;
 
 	@Override
 	public boolean registerUser(String u, Socket s) {
-		// TODO Auto-generated method stub
-		return false;
+		miembros.put(u, s);
+		return true;
 	}
 
 	@Override
 	public void broadcastMessage(String u, String message) throws IOException {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
@@ -29,13 +29,13 @@ public class RoomManagerSubclase extends NCRoomManager{
 
 	@Override
 	public void setRoomName(String roomName) {
-		// TODO Auto-generated method stub
+		this.roomName = roomName;
 		
 	}
 
 	@Override
 	public NCRoomDescription getDescription() {
-		ArrayList<String> nombreUsuarios = new ArrayList<String>();
+		ArrayList<String> nombreUsuarios = new ArrayList<>();
 		nombreUsuarios.addAll(miembros.keySet());
 		return new NCRoomDescription(roomName, nombreUsuarios, tiempoUltimoMensaje);
 	}

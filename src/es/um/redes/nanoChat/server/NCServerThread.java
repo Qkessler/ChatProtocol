@@ -56,9 +56,9 @@ public class NCServerThread extends Thread {
 				switch (message.getOpcode()) {
 				//TODO 1) si se nos pide la lista de salas se envía llamando a sendRoomList();
 					case NCMessage.OP_GET_ROOMLIST:
-						System.out.println("12");
+						System.out.println("estoy antes del sendRoomlist");
 						sendRoomList();
-						System.out.println("as");
+						System.out.println("estoy despues del sendRoomList");
 						break;
 				//TODO 2) Si se nos pide entrar en la sala entonces obtenemos el RoomManager de la sala,
 				//TODO 2) notificamos al usuario que ha sido aceptado y procesamos mensajes con processRoomMessages()
@@ -96,25 +96,31 @@ public class NCServerThread extends Thread {
 		//La lógica de nuestro programa nos obliga a que haya un nick registrado antes de proseguir
 		//TODO Entramos en un bucle hasta comprobar que alguno de los nicks proporcionados no está duplicado
 	    //TODO Extraer el nick del mensaje
-		String nickname = dis.readUTF();
 		//TODO Validar el nick utilizando el ServerManager - addUser()
-		boolean nickVerification = serverManager.addUser(nickname);
-		if (nickVerification){
-			dos.writeUTF(OPCODE_OK);
-		}
-		else {
-			dos.writeUTF(OPCODE_DUPLICADO);
-			receiveAndVerifyNickname();
+		boolean nickVerification = false;
+		while(!nickVerification){
+			NCRoomMessage message = (NCRoomMessage)NCMessage.readMessageFromSocket(dis);
+			String nickname = message.getName();
+			nickVerification = serverManager.addUser(nickname);
+			if (nickVerification) {
+				NCOpcodeMessage messageOK = (NCOpcodeMessage)NCMessage.makeOpcodeMessage(NCMessage.OP_NICK_OK);
+				dos.writeUTF(messageOK.toEncodedString());
+			}
+			else {
+				NCOpcodeMessage messageDuplicated = (NCOpcodeMessage)NCMessage.makeOpcodeMessage(NCMessage.OP_NICK_DUPLICADO);
+				dos.writeUTF(messageDuplicated.toEncodedString());
+			}
 		}
 		//TODO Contestar al cliente con el resultado (éxito o duplicado)
 	}
 
 	//Mandamos al cliente la lista de salas existentes
 	private void sendRoomList() throws IOException  {
+		System.out.println("Principìo del roomlist");
 
 		ArrayList<NCRoomDescription> roomList = serverManager.getRoomList();
 		System.out.println(roomList.size());
-		NCRoomListMessage message = new NCRoomListMessage(NCMessage.OP_SEND_ROOMLIST, roomList.size(), roomList);
+		NCRoomListMessage message = new NCRoomListMessage(NCMessage.OP_SEND_ROOMLIST, roomList);
 		String stringmessage = message.toEncodedString();
 		System.out.println(stringmessage);
 		dos.writeUTF(stringmessage);

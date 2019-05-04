@@ -12,5 +12,9 @@ public class NCOpcodeMessage extends NCMessage {
 		sb.append(END_LINE);  //Marcamos el final del mensaje
 		return sb.toString(); //Se obtiene el mensaje
 	}
+	
+	public static NCOpcodeMessage readFromString(byte code) {
+		return new NCOpcodeMessage(code);
+	}
 
 }

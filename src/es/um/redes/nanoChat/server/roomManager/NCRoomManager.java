@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public abstract class NCRoomManager {
 	String roomName;
-	
+
 	//Método para registrar a un usuario u en una sala (se anota también su socket de comunicación)
 	public abstract boolean registerUser(String u, Socket s);
 	//Método para hacer llegar un mensaje enviado por un usuario u

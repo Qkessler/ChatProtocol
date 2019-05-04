@@ -30,7 +30,8 @@ class NCServerManager {
 	//Método para registrar un RoomManager 
 	public void registerRoomManager(NCRoomManager rm) {
 		//TODO Dar soporte para que pueda haber más de una sala en el servidor
-		String roomName = ROOM_PREFIX + (char) nextRoom; 
+		String roomName = ROOM_PREFIX + (char) nextRoom;
+		rm.setRoomName(roomName);
 		rooms.put(roomName, rm);
 	}
 	
@@ -38,10 +39,14 @@ class NCServerManager {
 	public synchronized ArrayList<NCRoomDescription> getRoomList() {
 		//TODO Pregunta a cada RoomManager cuál es la descripción actual de su sala
 		ArrayList <NCRoomDescription> arrayList = new ArrayList <NCRoomDescription>();
+		System.out.println("estamos dentro del roomlist");
 		for (NCRoomManager roommanager : rooms.values()) {
-			System.out.println(roommanager.getDescription().toPrintableString());
 			arrayList.add(roommanager.getDescription());
 			
+		}
+		System.out.println("hemos pasado lo siguiente");
+		for(NCRoomDescription elem : arrayList) {
+			System.out.println(elem.toPrintableString());
 		}
 		//TODO Añade la información al ArrayList
 		return arrayList;
