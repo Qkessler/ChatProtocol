@@ -21,6 +21,8 @@ public abstract class NCMessage {
 	public static final byte OP_GET_ROOMINFO = 6;
 	public static final byte OP_NICK_OK = 8;
 	public static final byte OP_NICK_DUPLICADO = 9;
+	public static final byte OP_ENTER_TRUE = 10;
+	public static final byte OP_ENTER_FALSE = 11;
 	//Constantes con los delimitadores de los mensajes de field:value
 	public static final char DELIMITER = ':';    //Define el delimitador
 	public static final char END_LINE = '\n';    //Define el carácter de fin de línea
@@ -33,14 +35,14 @@ public abstract class NCMessage {
 	 * que aparece en los mensajes
 	 */
 	private static final Byte[] _valid_opcodes = { 
-		OP_NICK, OP_NICK_OK, OP_NICK_DUPLICADO, OP_GET_ROOMLIST, OP_SEND_ROOMLIST, OP_ENTER_ROOM, OP_LEAVE_ROOM, OP_REMOVE_USER, OP_GET_ROOMINFO
+		OP_NICK, OP_NICK_OK, OP_NICK_DUPLICADO, OP_GET_ROOMLIST, OP_SEND_ROOMLIST, OP_ENTER_ROOM, OP_ENTER_TRUE, OP_ENTER_FALSE, OP_LEAVE_ROOM, OP_REMOVE_USER, OP_GET_ROOMINFO
 		};
 
 	/**
 	 * cadena exacta de cada orden
 	 */
 	private static final String[] _valid_operations = {
-		"Nick", "Nick_OK", "Nick_DUPLICATED", "getRoomList", "sendRoomList","enterRoom", "leaveRoom", "removeUser", "getRoomInfo"
+		"Nick", "Nick_OK", "Nick_DUPLICATED", "getRoomList", "sendRoomList","enterRoom", "enter_True", "enter_False", "leaveRoom", "removeUser", "getRoomInfo"
 		};
 
 	/**
@@ -85,6 +87,8 @@ public abstract class NCMessage {
 	//Extrae la operación del mensaje entrante y usa la subclase para parsear el resto del mensaje
 	public static NCMessage readMessageFromSocket(DataInputStream dis) throws IOException {
 		String message = dis.readUTF();
+		System.out.println("Imprimo el mensaje de readMessageFromSocket: ");
+		System.out.println(message);
 		String[] lines = message.split(System.getProperty("line.separator"));
 		if (!lines[0].equals("")) { // Si la línea no está vacía
 			int idx = lines[0].indexOf(DELIMITER); // Posición del delimitador
@@ -113,6 +117,18 @@ public abstract class NCMessage {
 			case OP_SEND_ROOMLIST:
 			{
 				return NCRoomListMessage.readFromString(code, message);
+			}
+			case OP_ENTER_ROOM:
+			{
+				return NCRoomMessage.readFromString(code, message);
+			}
+			case OP_ENTER_TRUE:
+			{
+				return NCOpcodeMessage.readFromString(code);
+			}
+			case OP_ENTER_FALSE:
+			{
+				return NCOpcodeMessage.readFromString(code);
 			}
 			default:
 				System.err.println("Unknown message type received:" + code);

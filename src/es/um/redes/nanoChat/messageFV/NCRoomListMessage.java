@@ -31,7 +31,6 @@ public class NCRoomListMessage extends NCMessage {
 		
 	}
 	
-	@SuppressWarnings("deprecation")
 	public static NCRoomListMessage readFromString(byte code, String message) {
 		String[] lines = message.split(System.getProperty("line.separator"));
 		int idx = lines[0].indexOf(DELIMITER); // Posición del delimitador
@@ -61,7 +60,7 @@ public class NCRoomListMessage extends NCMessage {
 			else {
 				timeLastMessage = Long.parseLong(valueLastMessage);
 			}
-			array.add(new NCRoomDescription(valueRoomName, members, timeLastMessage));
+			array.add(new NCRoomDescription(valueRoomName, members, Integer.parseInt(LongitudMembers), timeLastMessage));
 		}
 		return new NCRoomListMessage(code, array);
 	}

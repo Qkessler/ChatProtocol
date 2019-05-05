@@ -37,13 +37,12 @@ public class RoomManagerSubclase extends NCRoomManager{
 	public NCRoomDescription getDescription() {
 		ArrayList<String> nombreUsuarios = new ArrayList<>();
 		nombreUsuarios.addAll(miembros.keySet());
-		return new NCRoomDescription(roomName, nombreUsuarios, tiempoUltimoMensaje);
+		return new NCRoomDescription(roomName, nombreUsuarios, nombreUsuarios.size(), tiempoUltimoMensaje);
 	}
 
 	@Override
 	public int usersInRoom() {
-		// TODO Auto-generated method stub
-		return 0;
+		return miembros.size();
 	}
 
 }

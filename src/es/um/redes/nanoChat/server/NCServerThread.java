@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import com.sun.xml.internal.bind.api.RawAccessor;
+
 import es.um.redes.nanoChat.messageFV.NCMessage;
 import es.um.redes.nanoChat.messageFV.NCOpcodeMessage;
 import es.um.redes.nanoChat.messageFV.NCRoomListMessage;
@@ -61,15 +63,14 @@ public class NCServerThread extends Thread {
 				//TODO 2) Si se nos pide entrar en la sala entonces obtenemos el RoomManager de la sala,
 				//TODO 2) notificamos al usuario que ha sido aceptado y procesamos mensajes con processRoomMessages()
 				//TODO 2) Si el usuario no es aceptado en la sala entonces se le notifica al cliente
-					case NCMessage.OP_GET_ROOMINFO:
-						NCRoomMessage roomMessage = (NCRoomMessage)message;
-						String nombreSala = roomMessage.getName();
-						NCRoomManager roomManagerSala = serverManager.rooms.get(nombreSala);
-						String aceptadoString = "ACEPTADO";
-						dos.writeUTF(aceptadoString);
-						processRoomMessages();
-						break;
-						
+					case NCMessage.OP_ENTER_ROOM:
+						NCRoomMessage message1 = (NCRoomMessage)message;
+						String name = message1.getName();
+						roomManager = serverManager.enterRoom(this.user, name, this.socket);
+						currentRoom = name;
+						NCOpcodeMessage response = (NCOpcodeMessage)NCMessage.makeOpcodeMessage(NCMessage.OP_ENTER_TRUE);
+						String rawresponse = response.toEncodedString();
+						dos.writeUTF(rawresponse);
 				
 				}
 			}

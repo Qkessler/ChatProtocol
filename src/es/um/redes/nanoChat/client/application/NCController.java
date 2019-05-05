@@ -74,6 +74,7 @@ public class NCController {
 
 	//Procesa los comandos introducidos por un usuario que aún no está dentro de una sala
 	public void processCommand() throws IOException {
+		System.out.println(clientStatus);
 		switch (currentCommand) {
 		case NCCommands.COM_NICK:
 			if (clientStatus == PRE_REGISTRATION) {
@@ -83,7 +84,7 @@ public class NCController {
 				System.out.println("* You have already registered a nickname ("+nickname+")");
 			break;
 		case NCCommands.COM_ROOMLIST:
-			if (clientStatus == REGISTERED) {
+			if (clientStatus == REGISTERED || clientStatus == KNOWS_ROOMS) {
 				getAndShowRooms();
 			}
 			else {
@@ -96,7 +97,6 @@ public class NCController {
 			//TODO LLamar a enterChat() si el estado actual del autómata lo permite
 			if (clientStatus == KNOWS_ROOMS) {
 				enterChat();
-				clientStatus = IN_ROOM;
 			}
 			else if (clientStatus == IN_ROOM){
 				System.out.println("* Can't get in a room if you are already in one.");
@@ -174,6 +174,7 @@ public class NCController {
 
 	//Método para procesar los comandos específicos de una sala
 	private void processRoomCommand() throws IOException {
+		System.out.println(clientStatus);
 		switch (currentCommand) {
 		case NCCommands.COM_ROOMINFO:
 			//El usuario ha solicitado información sobre la sala y llamamos al método que la obtendrá

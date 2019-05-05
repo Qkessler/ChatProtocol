@@ -1,5 +1,6 @@
 package es.um.redes.nanoChat.server;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,6 +8,7 @@ import java.util.HashSet;
 
 import es.um.redes.nanoChat.server.roomManager.NCRoomDescription;
 import es.um.redes.nanoChat.server.roomManager.NCRoomManager;
+import es.um.redes.nanoChat.server.roomManager.RoomManagerSubclase;
 
 /**
  * Esta clase contiene el estado general del servidor (sin la lógica relacionada con cada sala particular)
@@ -25,6 +27,11 @@ class NCServerManager {
 	
 	NCServerManager() {
 		nextRoom = INITIAL_ROOM;
+	}
+	
+	public void registerRoom(NCRoomManager rm, String name) {
+		rm.setRoomName(name);
+		rooms.put(name, rm);
 	}
 	
 	//Método para registrar un RoomManager 
@@ -72,10 +79,15 @@ class NCServerManager {
 	public synchronized NCRoomManager enterRoom(String u, String room, Socket s) {
 		//TODO Verificamos si la sala existe
 		if (rooms.containsKey(room)) {
+			rooms.get(room).registerUser(u, s);
 			return rooms.get(room);
 		}
 		else {
-			return null;
+			NCRoomManager rm = new RoomManagerSubclase();
+			registerRoom(rm, room);
+			rooms.get(room).registerUser(u, s);
+			return rooms.get(room);
+			
 		}
 		//TODO Decidimos qué hacer si la sala no existe (devolver error O crear la sala)
 		//TODO Si la sala existe y si es aceptado en la sala entonces devolvemos el RoomManager de la sala
