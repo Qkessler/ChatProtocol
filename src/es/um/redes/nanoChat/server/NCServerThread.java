@@ -56,9 +56,7 @@ public class NCServerThread extends Thread {
 				switch (message.getOpcode()) {
 				//TODO 1) si se nos pide la lista de salas se envía llamando a sendRoomList();
 					case NCMessage.OP_GET_ROOMLIST:
-						System.out.println("estoy antes del sendRoomlist");
 						sendRoomList();
-						System.out.println("estoy despues del sendRoomList");
 						break;
 				//TODO 2) Si se nos pide entrar en la sala entonces obtenemos el RoomManager de la sala,
 				//TODO 2) notificamos al usuario que ha sido aceptado y procesamos mensajes con processRoomMessages()
@@ -116,13 +114,9 @@ public class NCServerThread extends Thread {
 
 	//Mandamos al cliente la lista de salas existentes
 	private void sendRoomList() throws IOException  {
-		System.out.println("Principìo del roomlist");
-
 		ArrayList<NCRoomDescription> roomList = serverManager.getRoomList();
-		System.out.println(roomList.size());
 		NCRoomListMessage message = new NCRoomListMessage(NCMessage.OP_SEND_ROOMLIST, roomList);
 		String stringmessage = message.toEncodedString();
-		System.out.println(stringmessage);
 		dos.writeUTF(stringmessage);
 		//TODO La lista de salas debe obtenerse a partir del RoomManager y después enviarse mediante su mensaje correspondiente
 	}

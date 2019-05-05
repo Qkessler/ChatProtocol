@@ -39,14 +39,9 @@ class NCServerManager {
 	public synchronized ArrayList<NCRoomDescription> getRoomList() {
 		//TODO Pregunta a cada RoomManager cuál es la descripción actual de su sala
 		ArrayList <NCRoomDescription> arrayList = new ArrayList <NCRoomDescription>();
-		System.out.println("estamos dentro del roomlist");
 		for (NCRoomManager roommanager : rooms.values()) {
 			arrayList.add(roommanager.getDescription());
 			
-		}
-		System.out.println("hemos pasado lo siguiente");
-		for(NCRoomDescription elem : arrayList) {
-			System.out.println(elem.toPrintableString());
 		}
 		//TODO Añade la información al ArrayList
 		return arrayList;

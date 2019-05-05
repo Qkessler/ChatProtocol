@@ -34,24 +34,28 @@ public class NCRoomListMessage extends NCMessage {
 	@SuppressWarnings("deprecation")
 	public static NCRoomListMessage readFromString(byte code, String message) {
 		String[] lines = message.split(System.getProperty("line.separator"));
-		int idx = lines[1].indexOf(DELIMITER); // Posición del delimitador
-		int idxt = lines[3].indexOf("\t");
-		int idxpar1 = lines[3].indexOf("(");
-		int idxpar2 = lines[3].indexOf(")");
-		int idxL = lines[3].indexOf("L");
-		String fieldRoomlist = lines[2].substring(0, idx).toLowerCase();
+		int idx = lines[0].indexOf(DELIMITER); // Posición del delimitador
+		int idxt = lines[2].indexOf("\t");
+		int idxpar1 = lines[2].indexOf("(");
+		int idxpar2 = lines[2].indexOf(")");
+		String fieldRoomlist = lines[1].substring(0, idx-1).toLowerCase();
 		ArrayList<NCRoomDescription> array = new ArrayList<NCRoomDescription>();
-		for (int i = 3; i < lines.length+1; i++) {
+		for (int i = 2; i < lines.length; i++) {
 			long timeLastMessage;
-			
-			String fieldRoomName = lines[i].substring(0, idx-1).toLowerCase();
-			String valueRoomName = lines[i].substring(idx+1, idxt-1).trim();
-			String fieldMembers = lines[i].substring(idxt+2, idxpar1-1).toLowerCase();
-			String LongitudMembers = lines[i].substring(idxpar1+1, idxpar2-1).trim();
-			String fieldLastMessage = lines[i].substring(idxL, idxL+11).toLowerCase();
-			String valueLastMessage = lines[i].substring(idxL+13);
-			ArrayList<String> members = (ArrayList<String>) Arrays.asList(fieldMembers.split("\\s*,\\s*"));
-			if(valueLastMessage =="not yet") {
+			int idxL = lines[i].indexOf("L");
+			String fieldRoomName = lines[i].substring(0, idx).toLowerCase();
+			String valueRoomName = lines[i].substring(idx+1, idxt).trim();
+			String fieldMembers = lines[i].substring(idxt+2, idxpar1).toLowerCase();
+			String valueMembers = lines[i].substring(idxpar2+4, idxL-1).trim();
+			String LongitudMembers = lines[i].substring(idxpar1+1, idxpar2).trim();
+			String fieldLastMessage = lines[i].substring(idxL, idxL+12).toLowerCase();
+			String valueLastMessage = lines[i].substring(idxL+14);
+			String[] membersSplit = valueMembers.split("\\s*,\\s*");
+			ArrayList<String> members = new ArrayList<String>();
+			for(String m : membersSplit) {
+				members.add(m);
+			}
+			if(valueLastMessage.equals("not yet")) {
 				timeLastMessage = 0;
 			}
 			else {
