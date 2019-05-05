@@ -8,6 +8,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
+import es.um.redes.nanoChat.client.application.NCController;
 import es.um.redes.nanoChat.client.comm.NCConnector;
 
 public class NCShell {
@@ -105,7 +106,7 @@ public class NCShell {
 		String[] args = new String[0];
 		Vector<String> vargs = new Vector<String>();
 		while (true) {
-			System.out.print("(nanoChat-room) ");
+			System.out.print("(nanoChat-"+NCController.room+") ");
 			//Utilizamos un BufferedReader en lugar de un Scanner porque no podemos bloquear la entrada
 			BufferedReader standardInput = new BufferedReader(new InputStreamReader(System.in));
 			boolean blocked = true; 

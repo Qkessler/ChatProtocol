@@ -31,7 +31,7 @@ public class NCController {
 	//Nick del usuario
 	private String nickname;
 	//Sala de chat en la que se encuentra el usuario (si está en alguna)
-	private String room;
+	public static String room;
 	//Mensaje enviado o por enviar al chat
 	private String chatMessage;
 	//Dirección de internet del servidor de NanoChat
