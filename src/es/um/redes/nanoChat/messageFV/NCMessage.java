@@ -23,11 +23,16 @@ public abstract class NCMessage {
 	public static final byte OP_NICK_DUPLICADO = 9;
 	public static final byte OP_ENTER_TRUE = 10;
 	public static final byte OP_ENTER_FALSE = 11;
+	public static final byte OP_SEND_ROOMINFO = 12;
+	public static final byte OP_EXIT = 13;
+	
 	//Constantes con los delimitadores de los mensajes de field:value
 	public static final char DELIMITER = ':';    //Define el delimitador
 	public static final char END_LINE = '\n';    //Define el carácter de fin de línea
 	
 	public static final String OPCODE_FIELD = "operation";
+
+	
 
 	/**
 	 * Códigos de los opcodes válidos  El orden
@@ -35,14 +40,19 @@ public abstract class NCMessage {
 	 * que aparece en los mensajes
 	 */
 	private static final Byte[] _valid_opcodes = { 
-		OP_NICK, OP_NICK_OK, OP_NICK_DUPLICADO, OP_GET_ROOMLIST, OP_SEND_ROOMLIST, OP_ENTER_ROOM, OP_ENTER_TRUE, OP_ENTER_FALSE, OP_LEAVE_ROOM, OP_REMOVE_USER, OP_GET_ROOMINFO
+		OP_NICK, OP_NICK_OK, OP_NICK_DUPLICADO, OP_GET_ROOMLIST, 
+		OP_SEND_ROOMLIST, OP_ENTER_ROOM, OP_ENTER_TRUE, OP_ENTER_FALSE, 
+		OP_LEAVE_ROOM, OP_REMOVE_USER, OP_GET_ROOMINFO, OP_SEND_ROOMINFO,
+		OP_EXIT
 		};
 
 	/**
 	 * cadena exacta de cada orden
 	 */
 	private static final String[] _valid_operations = {
-		"Nick", "Nick_OK", "Nick_DUPLICATED", "getRoomList", "sendRoomList","enterRoom", "enter_True", "enter_False", "leaveRoom", "removeUser", "getRoomInfo"
+		"Nick", "Nick_OK", "Nick_DUPLICATED", "getRoomList", "sendRoomList",
+		"enterRoom", "enter_True", "enter_False", "leaveRoom", "removeUser",
+		"getRoomInfo", "sendRoomInfo", "exit"
 		};
 
 	/**
@@ -130,6 +140,18 @@ public abstract class NCMessage {
 			{
 				return NCOpcodeMessage.readFromString(code);
 			}
+			case OP_GET_ROOMINFO:
+			{
+				return NCOpcodeMessage.readFromString(code);
+			}
+			case OP_SEND_ROOMINFO:
+			{
+				return NCInfoMessage.readFromString(code, message);
+			}
+			case OP_EXIT:
+			{
+				return NCRoomMessage.readFromString(code, message);
+			}
 			default:
 				System.err.println("Unknown message type received:" + code);
 				return null;
@@ -149,4 +171,9 @@ public abstract class NCMessage {
 	public static NCMessage makeRoomListMessage(byte opcode, ArrayList<NCRoomDescription> roomList) {
 		return (new NCRoomListMessage(opcode, roomList));
 	}
+	
+	public static NCMessage makeInfoMessage(byte code, NCRoomDescription descripcion) {
+		return (new NCInfoMessage(code, descripcion));
+	}
+
 }

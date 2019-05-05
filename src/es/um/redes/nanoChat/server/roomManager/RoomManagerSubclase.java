@@ -23,7 +23,7 @@ public class RoomManagerSubclase extends NCRoomManager{
 
 	@Override
 	public void removeUser(String u) {
-		// TODO Auto-generated method stub
+		miembros.remove(u);
 		
 	}
 

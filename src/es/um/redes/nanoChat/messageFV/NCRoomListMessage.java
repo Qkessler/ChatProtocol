@@ -34,7 +34,6 @@ public class NCRoomListMessage extends NCMessage {
 	public static NCRoomListMessage readFromString(byte code, String message) {
 		String[] lines = message.split(System.getProperty("line.separator"));
 		int idx = lines[0].indexOf(DELIMITER); // Posición del delimitador
-		int idxt = lines[2].indexOf("\t");
 		int idxpar1 = lines[2].indexOf("(");
 		int idxpar2 = lines[2].indexOf(")");
 		String fieldRoomlist = lines[1].substring(0, idx-1).toLowerCase();
@@ -42,9 +41,10 @@ public class NCRoomListMessage extends NCMessage {
 		for (int i = 2; i < lines.length; i++) {
 			long timeLastMessage;
 			int idxL = lines[i].indexOf("L");
+			int idxM = lines[2].indexOf("M");
 			String fieldRoomName = lines[i].substring(0, idx).toLowerCase();
-			String valueRoomName = lines[i].substring(idx+1, idxt).trim();
-			String fieldMembers = lines[i].substring(idxt+2, idxpar1).toLowerCase();
+			String valueRoomName = lines[i].substring(idx+2, idxM-2).trim();
+			String fieldMembers = lines[i].substring(idxM, idxpar1).toLowerCase();
 			String valueMembers = lines[i].substring(idxpar2+4, idxL-1).trim();
 			String LongitudMembers = lines[i].substring(idxpar1+1, idxpar2).trim();
 			String fieldLastMessage = lines[i].substring(idxL, idxL+12).toLowerCase();

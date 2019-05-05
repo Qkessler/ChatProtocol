@@ -174,7 +174,6 @@ public class NCController {
 
 	//Método para procesar los comandos específicos de una sala
 	private void processRoomCommand() throws IOException {
-		System.out.println(clientStatus);
 		switch (currentCommand) {
 		case NCCommands.COM_ROOMINFO:
 			//El usuario ha solicitado información sobre la sala y llamamos al método que la obtendrá
@@ -198,14 +197,14 @@ public class NCController {
 	private void getAndShowInfo() throws IOException {
 		//TODO Pedimos al servidor información sobre la sala en concreto
 		NCRoomDescription info =  ncConnector.getRoomInfo(room);
-		System.out.println(info);
+		System.out.println(info.toPrintableString());
 		//TODO Mostramos por pantalla la información
 	}
 
 	//Método para notificar al servidor que salimos de la sala
-	private void exitTheRoom() {
+	private void exitTheRoom() throws IOException {
 		//TODO Mandamos al servidor el mensaje de salida
-		System.out.println("* You are out of the room.");
+		ncConnector.leaveRoom(room);
 		clientStatus = KNOWS_ROOMS;
 		//TODO Cambiamos el estado del autómata para indicar que estamos fuera de la sala
 	}

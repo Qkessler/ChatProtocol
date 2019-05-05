@@ -81,8 +81,11 @@ public class NCConnector {
 	}
 	
 	//Método para salir de una sala
-	public void leaveRoom(String room) throws IOException {
+	public void leaveRoom(String name) throws IOException {
 		//Funcionamiento resumido: SND(EXIT_ROOM)
+		NCRoomMessage message = (NCRoomMessage)NCMessage.makeRoomMessage(NCMessage.OP_EXIT, name);
+		String rawmessage = message.toEncodedString();
+		dos.writeUTF(rawmessage);
 		//TODO completar el método
 	}
 	
@@ -98,8 +101,8 @@ public class NCConnector {
 	public NCRoomDescription getRoomInfo(String room) throws IOException {
 		//Funcionamiento resumido: SND(GET_ROOMINFO) and RCV(ROOMINFO)
 		//TODO Construimos el mensaje de solicitud de información de la sala específica
-		NCRoomMessage messageEnviado = (NCRoomMessage) NCMessage.makeRoomMessage(NCMessage.OP_GET_ROOMINFO, room);
-		String messageToString = messageEnviado.toEncodedString();
+		NCOpcodeMessage sent = (NCOpcodeMessage)NCMessage.makeOpcodeMessage(NCMessage.OP_GET_ROOMINFO);
+		String messageToString = sent.toEncodedString();
 		dos.writeUTF(messageToString);
 		NCInfoMessage message = (NCInfoMessage)NCMessage.readMessageFromSocket(dis);
 		NCRoomDescription descripcion = message.getDescripcion();

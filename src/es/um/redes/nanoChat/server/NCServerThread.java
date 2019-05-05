@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import com.sun.xml.internal.bind.api.RawAccessor;
 
+import es.um.redes.nanoChat.messageFV.NCInfoMessage;
 import es.um.redes.nanoChat.messageFV.NCMessage;
 import es.um.redes.nanoChat.messageFV.NCOpcodeMessage;
 import es.um.redes.nanoChat.messageFV.NCRoomListMessage;
@@ -26,8 +27,6 @@ public class NCServerThread extends Thread {
 	//Input and Output Streams
 	private DataInputStream dis;
 	private DataOutputStream dos;
-	private final static String OPCODE_OK = "Ok";
-	private final static String OPCODE_DUPLICADO = "Duplicado";
 	//Usuario actual al que atiende este Thread
 	String user;
 	//RoomManager actual (dependerá de la sala a la que entre el usuario)
@@ -71,6 +70,7 @@ public class NCServerThread extends Thread {
 						NCOpcodeMessage response = (NCOpcodeMessage)NCMessage.makeOpcodeMessage(NCMessage.OP_ENTER_TRUE);
 						String rawresponse = response.toEncodedString();
 						dos.writeUTF(rawresponse);
+						processRoomMessages();
 				
 				}
 			}
@@ -104,6 +104,7 @@ public class NCServerThread extends Thread {
 			if (nickVerification) {
 				NCOpcodeMessage messageOK = (NCOpcodeMessage)NCMessage.makeOpcodeMessage(NCMessage.OP_NICK_OK);
 				dos.writeUTF(messageOK.toEncodedString());
+				user = nickname;
 			}
 			else {
 				NCOpcodeMessage messageDuplicated = (NCOpcodeMessage)NCMessage.makeOpcodeMessage(NCMessage.OP_NICK_DUPLICADO);
@@ -122,12 +123,28 @@ public class NCServerThread extends Thread {
 		//TODO La lista de salas debe obtenerse a partir del RoomManager y después enviarse mediante su mensaje correspondiente
 	}
 
-	private void processRoomMessages()  {
+	private void processRoomMessages() throws IOException  {
 		//TODO Comprobamos los mensajes que llegan hasta que el usuario decida salir de la sala
 		boolean exit = false;
 		while (!exit) {
 			//TODO Se recibe el mensaje enviado por el usuario
-			//TODO Se analiza el código de operación del mensaje y se trata en consecuencia
+			NCMessage mensaje = NCMessage.readMessageFromSocket(dis);
+			byte code = mensaje.getOpcode();
+			switch(code) {
+			case NCMessage.OP_GET_ROOMINFO:
+			{
+				NCInfoMessage message = (NCInfoMessage)NCMessage.makeInfoMessage(NCMessage.OP_SEND_ROOMINFO, roomManager.getDescription());
+				String rawresponse = message.toEncodedString();
+				dos.writeUTF(rawresponse);
+				break;
+			}
+			case NCMessage.OP_EXIT:
+			{
+				roomManager.removeUser(user);
+				exit = true;
+				break;
+			}
+			}
 		}
 	}
 }
