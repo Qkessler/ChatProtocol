@@ -1,9 +1,13 @@
 package es.um.redes.nanoChat.server.roomManager;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import es.um.redes.nanoChat.messageFV.NCMessage;
+import es.um.redes.nanoChat.messageFV.NCSendMessage;
 
 public class RoomManagerSubclase extends NCRoomManager{
 	private HashMap<String, Socket> miembros = new HashMap<String, Socket>();
@@ -17,7 +21,15 @@ public class RoomManagerSubclase extends NCRoomManager{
 
 	@Override
 	public void broadcastMessage(String u, String message) throws IOException {
-		
+		for(String e : miembros.keySet()) {
+			if (!e.equals(u)) {
+				Socket socket = miembros.get(e);
+				DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+				NCSendMessage mensaje = (NCSendMessage)NCMessage.makeSendMessage(NCMessage.OP_SEND_CHAT, u, message);
+				String raw = mensaje.toEncodedString();
+				dos.writeUTF(raw);
+			}
+		}
 		
 	}
 

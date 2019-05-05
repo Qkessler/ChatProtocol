@@ -13,6 +13,7 @@ import es.um.redes.nanoChat.messageFV.NCMessage;
 import es.um.redes.nanoChat.messageFV.NCOpcodeMessage;
 import es.um.redes.nanoChat.messageFV.NCRoomListMessage;
 import es.um.redes.nanoChat.messageFV.NCRoomMessage;
+import es.um.redes.nanoChat.messageFV.NCSendMessage;
 import es.um.redes.nanoChat.server.roomManager.NCRoomDescription;
 import es.um.redes.nanoChat.server.roomManager.NCRoomManager;
 
@@ -71,6 +72,7 @@ public class NCServerThread extends Thread {
 						String rawresponse = response.toEncodedString();
 						dos.writeUTF(rawresponse);
 						processRoomMessages();
+					
 				
 				}
 			}
@@ -144,6 +146,9 @@ public class NCServerThread extends Thread {
 				exit = true;
 				break;
 			}
+			case NCMessage.OP_SEND_CHAT:
+				NCSendMessage message = (NCSendMessage)mensaje;
+				roomManager.broadcastMessage(user, message.getText());
 			}
 		}
 	}

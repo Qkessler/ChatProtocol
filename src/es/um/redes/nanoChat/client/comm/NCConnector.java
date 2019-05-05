@@ -15,6 +15,7 @@ import es.um.redes.nanoChat.messageFV.NCMessage;
 import es.um.redes.nanoChat.messageFV.NCOpcodeMessage;
 import es.um.redes.nanoChat.messageFV.NCRoomListMessage;
 import es.um.redes.nanoChat.messageFV.NCRoomMessage;
+import es.um.redes.nanoChat.messageFV.NCSendMessage;
 import es.um.redes.nanoChat.server.roomManager.NCRoomDescription;
 
 //Esta clase proporciona la funcionalidad necesaria para intercambiar mensajes entre el cliente y el servidor de NanoChat
@@ -96,6 +97,11 @@ public class NCConnector {
 	
 	//IMPORTANTE!!
 	//TODO Es necesario implementar métodos para recibir y enviar mensajes de chat a una sala
+	public void sendMessageChat(String name, String text) throws IOException {
+		NCSendMessage message = (NCSendMessage)NCMessage.makeSendMessage(NCMessage.OP_SEND_CHAT, name, text);
+		String rawmessage = message.toEncodedString();
+		dos.writeUTF(rawmessage);
+	}
 	
 	//Método para pedir la descripción de una sala
 	public NCRoomDescription getRoomInfo(String room) throws IOException {
@@ -109,6 +115,18 @@ public class NCConnector {
 		//TODO Recibimos el mensaje de respuesta
 		//TODO Devolvemos la descripción contenida en el mensaje
 		return descripcion;
+	}
+	
+	public String receiveMessageChat() throws IOException {
+		NCMessage message = NCMessage.readMessageFromSocket(dis);
+		byte code = message.getOpcode();
+		switch(code) {
+		case NCMessage.OP_SEND_CHAT:
+			NCSendMessage mensaje = (NCSendMessage)message;
+			String chat = mensaje.getName()+": "+mensaje.getText();
+			return chat;
+		}
+		return null;
 	}
 	
 	//Método para cerrar la comunicación con la sala

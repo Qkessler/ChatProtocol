@@ -8,6 +8,8 @@ import es.um.redes.nanoChat.client.comm.NCConnector;
 import es.um.redes.nanoChat.client.shell.NCCommands;
 import es.um.redes.nanoChat.client.shell.NCShell;
 import es.um.redes.nanoChat.directory.connector.DirectoryConnector;
+import es.um.redes.nanoChat.messageFV.NCMessage;
+import es.um.redes.nanoChat.messageFV.NCSendMessage;
 import es.um.redes.nanoChat.server.roomManager.NCRoomDescription;
 
 public class NCController {
@@ -107,10 +109,12 @@ public class NCController {
 			//TODO Si no está permitido informar al usuario
 			break;
 		case NCCommands.COM_QUIT:
+		{
 			//Cuando salimos tenemos que cerrar todas las conexiones y sockets abiertos
 			ncConnector.disconnect();			
 			directoryConnector.close();
 			break;
+		}
 		default:
 		}
 	}
@@ -188,10 +192,9 @@ public class NCController {
 			processIncommingMessage();
 			break;
 		case NCCommands.COM_EXIT:
-			//El usuario quiere salir de la sala
 			exitTheRoom();
-		}		
-	}
+		}
+	}	
 
 	//Método para solicitar al servidor la información sobre una sala y para mostrarla por pantalla
 	private void getAndShowInfo() throws IOException {
@@ -210,7 +213,8 @@ public class NCController {
 	}
 
 	//Método para enviar un mensaje al chat de la sala
-	private void sendChatMessage() {
+	private void sendChatMessage() throws IOException {
+		ncConnector.sendMessageChat(nickname, chatMessage);
 		//TODO Mandamos al servidor un mensaje de chat
 		
 		
@@ -219,6 +223,14 @@ public class NCController {
 	//Método para procesar los mensajes recibidos del servidor mientras que el shell estaba esperando un comando de usuario
 	private void processIncommingMessage() {		
 		//TODO Recibir el mensaje
+		try {
+			String roomname = ncConnector.receiveMessageChat();
+			if(roomname != null) {
+				room = roomname;
+			}
+		}catch(IOException e){}
+			
+		
 		//TODO En función del tipo de mensaje, actuar en consecuencia
 		//TODO (Ejemplo) En el caso de que fuera un mensaje de chat de broadcast mostramos la información de quién envía el mensaje y el mensaje en sí
 	}
