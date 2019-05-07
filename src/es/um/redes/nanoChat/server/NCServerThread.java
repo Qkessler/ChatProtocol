@@ -72,7 +72,6 @@ public class NCServerThread extends Thread {
 						String rawresponse = response.toEncodedString();
 						dos.writeUTF(rawresponse);
 						processRoomMessages();
-					
 				
 				}
 			}

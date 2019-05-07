@@ -22,9 +22,22 @@ public class NCRoomListMessage extends NCMessage {
 	public String toEncodedString() {
 		StringBuffer sb = new StringBuffer();			
 		sb.append(OPCODE_FIELD+DELIMITER+opcodeToOperation(opcode)+END_LINE); //Construimos el campo
-		sb.append("RoomList"+DELIMITER+END_LINE); //Construimos el campo
 		for(NCRoomDescription valores : roomList) {
-			sb.append(valores.toPrintableString()+END_LINE);
+			sb.append("Room Name: "+ valores.roomName+END_LINE);
+			sb.append("Members length: "+ valores.membersSize+END_LINE);
+			String membersstring = "Members: ";
+			if(valores.membersSize == 0) {
+				membersstring += "No existen miembros.";
+			}
+			else {	
+			
+			for(String x : valores.members) {
+				membersstring += x;
+				membersstring += " ";
+			}
+			}
+			sb.append(membersstring+END_LINE);
+			sb.append("Time Last Message: "+ Long.toString(valores.timeLastMessage)+END_LINE);
 		}
 		sb.append(END_LINE);  //Marcamos el final del mensaje
 		return sb.toString(); //Se obtiene el mensaje
@@ -33,24 +46,26 @@ public class NCRoomListMessage extends NCMessage {
 	
 	public static NCRoomListMessage readFromString(byte code, String message) {
 		String[] lines = message.split(System.getProperty("line.separator"));
-		int idx = lines[1].indexOf(":");
-		String fieldRoomlist = lines[1].substring(0, idx).toLowerCase();
 		ArrayList<NCRoomDescription> array = new ArrayList<NCRoomDescription>();
-		for (int i = 2; i < lines.length; i++) {
+		for (int i = 1; i < lines.length; i += 4) {
 			long timeLastMessage;
-			int idxL = lines[i].indexOf("L");
+			int idxL = lines[i].indexOf("T");
 			int idxM = lines[i].indexOf("M");
-			int idxpuntos = lines[i].indexOf(":"); // Posición del delimitador
+			int idxpuntos1 = lines[i].indexOf(":"); // Posición del delimitador
+			int idxpuntos2 = lines[i+1].indexOf(":");
+			int idxpuntos3 = lines[i+2].indexOf(":");
+			int idxpuntos4 = lines[i+3].indexOf(":");
 			int idxpar1 = lines[i].indexOf("(");
 			int idxpar2 = lines[i].indexOf(")");
-			String fieldRoomName = lines[i].substring(0, idxpuntos).toLowerCase();
-			String valueRoomName = lines[i].substring(idxpuntos+2, idxM-1).trim();
-			String fieldMembers = lines[i].substring(idxM, idxpar1).toLowerCase();
-			String valueMembers = lines[i].substring(idxpar2+3, idxL-2).trim();
-			String LongitudMembers = lines[i].substring(idxpar1+1, idxpar2).trim();
-			String fieldLastMessage = lines[i].substring(idxL, idxL+12).toLowerCase();
-			String valueLastMessage = lines[i].substring(idxL+14);
-			String[] membersSplit = valueMembers.split("\\s*,\\s*");
+			String fieldRoomName = lines[i].substring(0, idxpuntos1).toLowerCase();
+			String valueRoomName = lines[i].substring(idxpuntos1+2).trim();
+			String fieldMemberslength = lines[i+1].substring(0, idxpuntos2).toLowerCase();
+			String LongitudMembers = lines[i+1].substring(idxpuntos2+2).trim();
+			String fieldMembers = lines[i+2].substring(0, idxpuntos3).toLowerCase();
+			String valueMembers = lines[i+2].substring(idxpuntos3+2).trim();
+			String fieldLastMessage = lines[i+3].substring(0, idxpuntos4).toLowerCase();
+			String valueLastMessage = lines[i+3].substring(idxpuntos4+2);
+			String[] membersSplit = valueMembers.split("\\s*\\s\\s*");
 			ArrayList<String> members = new ArrayList<String>();
 			if (!valueMembers.equals("")) {
 				for(String m : membersSplit) {

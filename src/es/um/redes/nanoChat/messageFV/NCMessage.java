@@ -98,8 +98,6 @@ public abstract class NCMessage {
 	//Extrae la operación del mensaje entrante y usa la subclase para parsear el resto del mensaje
 	public static NCMessage readMessageFromSocket(DataInputStream dis) throws IOException {
 		String message = dis.readUTF();
-		System.out.println("Imprimo el mensaje de readMessageFromSocket: ");
-		System.out.println(message);
 		String[] lines = message.split(System.getProperty("line.separator"));
 		if (!lines[0].equals("")) { // Si la línea no está vacía
 			int idx = lines[0].indexOf(DELIMITER); // Posición del delimitador

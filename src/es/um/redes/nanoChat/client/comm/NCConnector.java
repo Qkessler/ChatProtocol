@@ -68,7 +68,6 @@ public class NCConnector {
 	//Método para solicitar la entrada en una sala
 	public boolean enterRoom(String room) throws IOException {
 		//Funcionamiento resumido: SND(ENTER_ROOM<room>) and RCV(IN_ROOM) or RCV(REJECT)
-		System.out.println("he entrado al enterRoom");
 		NCRoomMessage enterRoomMessage = (NCRoomMessage) NCMessage.makeRoomMessage(NCMessage.OP_ENTER_ROOM, room);
 		String raw = enterRoomMessage.toEncodedString();
 		dos.writeUTF(raw);

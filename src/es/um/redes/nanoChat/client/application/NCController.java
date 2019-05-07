@@ -18,7 +18,6 @@ public class NCController {
 	private static final byte PRE_REGISTRATION = 2;
 	private static final byte REGISTERED = 3;
 	private static final byte IN_ROOM = 4;
-	private static final byte KNOWS_ROOMS = 5;
 	//Código de protocolo implementado por este cliente
 	//TODO Cambiar para cada grupo
 	private static final int PROTOCOL = 46610755;
@@ -76,7 +75,6 @@ public class NCController {
 
 	//Procesa los comandos introducidos por un usuario que aún no está dentro de una sala
 	public void processCommand() throws IOException {
-		System.out.println(clientStatus);
 		switch (currentCommand) {
 		case NCCommands.COM_NICK:
 			if (clientStatus == PRE_REGISTRATION) {
@@ -86,7 +84,7 @@ public class NCController {
 				System.out.println("* You have already registered a nickname ("+nickname+")");
 			break;
 		case NCCommands.COM_ROOMLIST:
-			if (clientStatus == REGISTERED || clientStatus == KNOWS_ROOMS) {
+			if (clientStatus == REGISTERED) {
 				getAndShowRooms();
 			}
 			else {
@@ -97,7 +95,7 @@ public class NCController {
 			break;
 		case NCCommands.COM_ENTER:
 			//TODO LLamar a enterChat() si el estado actual del autómata lo permite
-			if (clientStatus == KNOWS_ROOMS) {
+			if (clientStatus == REGISTERED) {
 				enterChat();
 			}
 			else if (clientStatus == IN_ROOM){
@@ -145,7 +143,6 @@ public class NCController {
 		//TODO Lista que contendrá las descripciones de las salas existentes
 		//TODO Le pedimos al conector que obtenga la lista de salas ncConnector.getRooms()
 		ArrayList<NCRoomDescription> listaSalas = ncConnector.getRooms();
-		clientStatus = KNOWS_ROOMS;
 		for(NCRoomDescription elem : listaSalas) {
 			System.out.println(elem.toPrintableString());
 		}
@@ -208,7 +205,7 @@ public class NCController {
 	private void exitTheRoom() throws IOException {
 		//TODO Mandamos al servidor el mensaje de salida
 		ncConnector.leaveRoom(room);
-		clientStatus = KNOWS_ROOMS;
+		clientStatus = REGISTERED;
 		//TODO Cambiamos el estado del autómata para indicar que estamos fuera de la sala
 	}
 
