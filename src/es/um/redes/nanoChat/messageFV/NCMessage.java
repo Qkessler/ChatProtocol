@@ -179,8 +179,8 @@ public abstract class NCMessage {
 		return (new NCInfoMessage(code, descripcion));
 	}
 
-	public static NCSendMessage makeSendMessage(byte opSendChat, String name, String text) {
-		return (new NCSendMessage(opSendChat, name, text));
+	public static NCSendMessage makeSendMessage(byte opSendChat, String name, String text, long date) {
+		return (new NCSendMessage(opSendChat, name, text, date));
 	}
 
 }

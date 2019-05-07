@@ -49,14 +49,10 @@ public class NCRoomListMessage extends NCMessage {
 		ArrayList<NCRoomDescription> array = new ArrayList<NCRoomDescription>();
 		for (int i = 1; i < lines.length; i += 4) {
 			long timeLastMessage;
-			int idxL = lines[i].indexOf("T");
-			int idxM = lines[i].indexOf("M");
 			int idxpuntos1 = lines[i].indexOf(":"); // Posición del delimitador
 			int idxpuntos2 = lines[i+1].indexOf(":");
 			int idxpuntos3 = lines[i+2].indexOf(":");
 			int idxpuntos4 = lines[i+3].indexOf(":");
-			int idxpar1 = lines[i].indexOf("(");
-			int idxpar2 = lines[i].indexOf(")");
 			String fieldRoomName = lines[i].substring(0, idxpuntos1).toLowerCase();
 			String valueRoomName = lines[i].substring(idxpuntos1+2).trim();
 			String fieldMemberslength = lines[i+1].substring(0, idxpuntos2).toLowerCase();
