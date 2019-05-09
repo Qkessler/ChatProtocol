@@ -169,7 +169,7 @@ public class NCController {
 		//TODO En caso contrario informamos que estamos dentro y seguimos
 		//TODO Cambiamos el estado del autómata para aceptar nuevos comandos
 		
-		exitTheRoom();
+//		exitTheRoom();
 		//TODO Llegados a este punto el usuario ha querido salir de la sala, cambiamos el estado del autómata
 	}
 

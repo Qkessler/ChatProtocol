@@ -4,6 +4,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import es.um.redes.nanoChat.messageFV.NCMessage;
@@ -25,6 +26,8 @@ public class RoomManagerSubclase extends NCRoomManager{
 			if (!e.equals(u)) {
 				Socket socket = miembros.get(e);
 				DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+//				Date d = new Date();
+//				tiempoUltimoMensaje = d.getDate();
 				NCSendMessage mensaje = (NCSendMessage)NCMessage.makeSendMessage(NCMessage.OP_SEND_CHAT, u, message);
 				String raw = mensaje.toEncodedString();
 				dos.writeUTF(raw);
