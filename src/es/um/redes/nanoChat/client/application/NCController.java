@@ -184,10 +184,10 @@ public class NCController {
 			//El usuario quiere enviar un mensaje al chat de la sala
 			sendChatMessage();
 			break;
-		case NCCommands.COM_SOCKET_IN:
-			//En este caso lo que ha sucedido es que hemos recibido un mensaje desde la sala y hay que procesarlo
-			processIncommingMessage();
-			break;
+//		case NCCommands.COM_SOCKET_IN:
+//			//En este caso lo que ha sucedido es que hemos recibido un mensaje desde la sala y hay que procesarlo
+//			processIncommingMessage();
+//			break;
 		case NCCommands.COM_EXIT:
 			exitTheRoom();
 		}
@@ -220,6 +220,7 @@ public class NCController {
 	//Método para procesar los mensajes recibidos del servidor mientras que el shell estaba esperando un comando de usuario
 	private void processIncommingMessage() {		
 		//TODO Recibir el mensaje
+		System.out.println("Estoy dentro del processIncomingmessage");
 		try {
 			NCMessage recibido = ncConnector.receiveMessageChat();
 			byte code = recibido.getOpcode();

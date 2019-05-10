@@ -12,6 +12,7 @@ import es.um.redes.nanoChat.messageFV.NCSendMessage;
 
 public class RoomManagerSubclase extends NCRoomManager{
 	private HashMap<String, Socket> miembros = new HashMap<String, Socket>();
+	private ArrayList<NCSendMessage> historial = new ArrayList<NCSendMessage>();
 	private long tiempoUltimoMensaje;
 
 	@Override
@@ -19,7 +20,6 @@ public class RoomManagerSubclase extends NCRoomManager{
 		miembros.put(u, s);
 		return true;
 	}
-
 	@Override
 	public void broadcastMessage(String u, String message) throws IOException {
 		for(String e : miembros.keySet()) {
@@ -29,6 +29,7 @@ public class RoomManagerSubclase extends NCRoomManager{
 //				Date d = new Date();
 //				tiempoUltimoMensaje = d.getDate();
 				NCSendMessage mensaje = (NCSendMessage)NCMessage.makeSendMessage(NCMessage.OP_SEND_CHAT, u, message);
+				historial.add(mensaje);
 				String raw = mensaje.toEncodedString();
 				dos.writeUTF(raw);
 			}
