@@ -116,16 +116,9 @@ public class NCConnector {
 		return descripcion;
 	}
 	
-	public String receiveMessageChat() throws IOException {
+	public NCMessage receiveMessageChat() throws IOException {
 		NCMessage message = NCMessage.readMessageFromSocket(dis);
-		byte code = message.getOpcode();
-		switch(code) {
-		case NCMessage.OP_SEND_CHAT:
-			NCSendMessage mensaje = (NCSendMessage)message;
-			String chat = mensaje.getName()+": "+mensaje.getText();
-			return chat;
-		}
-		return null;
+		return message;
 	}
 	
 	//Método para cerrar la comunicación con la sala

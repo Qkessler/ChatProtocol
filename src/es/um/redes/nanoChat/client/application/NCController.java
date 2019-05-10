@@ -221,10 +221,15 @@ public class NCController {
 	private void processIncommingMessage() {		
 		//TODO Recibir el mensaje
 		try {
-			String roomname = ncConnector.receiveMessageChat();
-			if(roomname != null) {
-				room = roomname;
+			NCMessage recibido = ncConnector.receiveMessageChat();
+			byte code = recibido.getOpcode();
+			switch(code) {
+			case NCMessage.OP_SEND_CHAT:
+				NCSendMessage mensaje = (NCSendMessage)recibido;
+				String chat = mensaje.getName() + ": " + mensaje.getText();
+				System.out.println(chat);
 			}
+			
 		}catch(IOException e){}
 			
 		
