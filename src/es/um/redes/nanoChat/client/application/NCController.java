@@ -184,10 +184,10 @@ public class NCController {
 			//El usuario quiere enviar un mensaje al chat de la sala
 			sendChatMessage();
 			break;
-//		case NCCommands.COM_SOCKET_IN:
-//			//En este caso lo que ha sucedido es que hemos recibido un mensaje desde la sala y hay que procesarlo
-//			processIncommingMessage();
-//			break;
+		case NCCommands.COM_SOCKET_IN:
+			//En este caso lo que ha sucedido es que hemos recibido un mensaje desde la sala y hay que procesarlo
+			processIncommingMessage();
+			break;
 		case NCCommands.COM_EXIT:
 			exitTheRoom();
 		}
