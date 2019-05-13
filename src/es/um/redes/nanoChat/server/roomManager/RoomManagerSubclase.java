@@ -22,6 +22,7 @@ public class RoomManagerSubclase extends NCRoomManager{
 	}
 	@Override
 	public void broadcastMessage(String u, String message) throws IOException {
+		tiempoUltimoMensaje = System.currentTimeMillis();
 		for(String e : miembros.keySet()) {
 			if (!e.equals(u)) {
 				Socket socket = miembros.get(e);
@@ -29,7 +30,6 @@ public class RoomManagerSubclase extends NCRoomManager{
 				NCSendMessage mensaje = (NCSendMessage)NCMessage.makeSendMessage(NCMessage.OP_SEND_CHAT, u, message);
 				historial.add(mensaje);
 				String raw = mensaje.toEncodedString();
-				System.out.println(raw);
 				dos.writeUTF(raw);
 			}
 		}
