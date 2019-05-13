@@ -28,7 +28,6 @@ public class NCSendMessage extends NCMessage {
 		sb.append(OPCODE_FIELD+DELIMITER+opcodeToOperation(opcode)+END_LINE); //Construimos el campo
 		sb.append(NAME_FIELD+DELIMITER+name+END_LINE); //Construimos el campo
 		sb.append("Text"+DELIMITER+text+END_LINE);
-//		sb.append("Time Message"+DELIMITER+timeMessage+END_LINE);
 		sb.append(END_LINE);  //Marcamos el final del mensaje
 		return sb.toString(); //Se obtiene el mensaje
 
@@ -38,18 +37,13 @@ public class NCSendMessage extends NCMessage {
 	//Parseamos el mensaje contenido en message con el fin de obtener los distintos campos
 	public static NCSendMessage readFromString(byte code, String message) {
 		String[] lines = message.split(System.getProperty("line.separator"));
-		String name = null;
 		int dospuntos1 = lines[1].indexOf(DELIMITER); // Posición del delimitador
 		int dospuntos2 = lines[2].indexOf(DELIMITER);
-		int dospuntos3 = lines[3].indexOf(DELIMITER);
 		String field = lines[1].substring(0, dospuntos1).toLowerCase(); 																		// minúsculas
 		String value = lines[1].substring(dospuntos1 + 1).trim();
 		String fieldText = lines[2].substring(0, dospuntos2);
 		String valueMessage = lines[2].substring(dospuntos2 + 1);
-//		String valueDate = lines[3].substring(dospuntos3+1);
-		if (field.equalsIgnoreCase(NAME_FIELD))
-			name = value;
-		return new NCSendMessage(code, name, valueMessage);			//, Long.parseLong(valueDate)
+		return new NCSendMessage(code, value, valueMessage);			//, Long.parseLong(valueDate)
 	}
 
 	public String getName() {

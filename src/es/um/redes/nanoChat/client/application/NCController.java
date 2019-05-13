@@ -220,7 +220,6 @@ public class NCController {
 	//Método para procesar los mensajes recibidos del servidor mientras que el shell estaba esperando un comando de usuario
 	private void processIncommingMessage() {		
 		//TODO Recibir el mensaje
-		System.out.println("Estoy dentro del processIncomingmessage");
 		try {
 			NCMessage recibido = ncConnector.receiveMessageChat();
 			byte code = recibido.getOpcode();

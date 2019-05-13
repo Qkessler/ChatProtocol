@@ -26,11 +26,10 @@ public class RoomManagerSubclase extends NCRoomManager{
 			if (!e.equals(u)) {
 				Socket socket = miembros.get(e);
 				DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-//				Date d = new Date();
-//				tiempoUltimoMensaje = d.getDate();
 				NCSendMessage mensaje = (NCSendMessage)NCMessage.makeSendMessage(NCMessage.OP_SEND_CHAT, u, message);
 				historial.add(mensaje);
 				String raw = mensaje.toEncodedString();
+				System.out.println(raw);
 				dos.writeUTF(raw);
 			}
 		}
