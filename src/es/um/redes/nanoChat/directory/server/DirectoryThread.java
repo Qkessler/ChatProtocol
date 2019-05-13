@@ -54,13 +54,11 @@ public class DirectoryThread extends Thread {
 				// 2) Extraer quién es el cliente (su dirección) 
 				InetSocketAddress client = (InetSocketAddress)pckt.getSocketAddress();
 				// 3) Vemos si el mensaje debe ser descartado por la probabilidad de descarte 
-
 				double rand = Math.random();
-				if (rand < messageDiscardProbability) {
+				while(rand < messageDiscardProbability) {
 					System.err.println("Directory DISCARDED corrupt request from... ");
-					continue;
+					rand = Math.random();
 				}
-				
 				//TODO 4) Analizar y procesar la solicitud (llamada a processRequestFromCLient)
 				//processRequestFromClient(, client);
 				processRequestFromClient(pckt.getData(), client);

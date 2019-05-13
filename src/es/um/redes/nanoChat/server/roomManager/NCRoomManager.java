@@ -21,7 +21,7 @@ public abstract class NCRoomManager {
 	public abstract NCRoomDescription getDescription();
 	//Método para devolver el número de usuarios conectados a una sala
 	public abstract int usersInRoom();
-	public abstract ArrayList<NCSendMessage> getHistorial();
+//	public abstract ArrayList<NCSendMessage> getHistorial();
 	
 
 }

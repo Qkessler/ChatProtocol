@@ -156,8 +156,8 @@ public abstract class NCMessage {
 			{
 				return NCSendMessage.readFromString(code, message);
 			}
-			case OP_GET_HISTORY:
-				return NCHistoryMessage.readFromString(code, message);
+//			case OP_GET_HISTORY:
+//				return NCHistoryMessage.readFromString(code, message);
 			default:
 				System.err.println("Unknown message type received:" + code);
 				return null;
@@ -186,8 +186,8 @@ public abstract class NCMessage {
 		return (new NCSendMessage(opSendChat, name, text));		//, date
 	}
 
-	public static NCHistoryMessage makeHistoryMessage(byte code, ArrayList<NCSendMessage> messages) {
-		return (new NCHistoryMessage(code, messages));
-	}
+//	public static NCHistoryMessage makeHistoryMessage(byte code, ArrayList<NCSendMessage> messages) {
+//		return (new NCHistoryMessage(code, messages));
+//	}
 
 }

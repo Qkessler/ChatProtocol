@@ -151,11 +151,11 @@ public class NCServerThread extends Thread {
 				NCSendMessage message = (NCSendMessage)mensaje;
 				roomManager.broadcastMessage(user, message.getText());
 			}
-			case NCMessage.OP_GET_HISTORY:
-			{
-				NCHistoryMessage message = (NCHistoryMessage)mensaje;
-				roomManager.getHistorial();
-			}
+//			case NCMessage.OP_GET_HISTORY:
+//			{
+//				NCHistoryMessage message = (NCHistoryMessage)mensaje;
+//				roomManager.getHistorial();
+//			}
 			}
 		}
 		
