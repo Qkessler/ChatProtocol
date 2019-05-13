@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import com.sun.xml.internal.bind.api.RawAccessor;
 
+import es.um.redes.nanoChat.messageFV.NCHistoryMessage;
 import es.um.redes.nanoChat.messageFV.NCInfoMessage;
 import es.um.redes.nanoChat.messageFV.NCMessage;
 import es.um.redes.nanoChat.messageFV.NCOpcodeMessage;
@@ -146,9 +147,17 @@ public class NCServerThread extends Thread {
 				break;
 			}
 			case NCMessage.OP_SEND_CHAT:
+			{
 				NCSendMessage message = (NCSendMessage)mensaje;
 				roomManager.broadcastMessage(user, message.getText());
 			}
+			case NCMessage.OP_GET_HISTORY:
+			{
+				NCHistoryMessage message = (NCHistoryMessage)mensaje;
+				roomManager.getHistorial();
+			}
+			}
 		}
+		
 	}
 }

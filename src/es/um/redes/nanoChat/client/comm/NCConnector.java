@@ -62,7 +62,6 @@ public class NCConnector {
 		return roomList.getRoomList();	
 		//va a recibir ahora un mensaje con el opcode GET_ROOMLIST, en el que esta contenida la 
 		//lista de NCRoomDescripcion.
-
 	}
 	
 	//Método para solicitar la entrada en una sala

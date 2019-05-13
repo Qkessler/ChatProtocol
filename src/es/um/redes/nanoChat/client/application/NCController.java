@@ -188,10 +188,17 @@ public class NCController {
 			//En este caso lo que ha sucedido es que hemos recibido un mensaje desde la sala y hay que procesarlo
 			processIncommingMessage();
 			break;
+		case NCCommands.COM_HISTORY:
+			getHistory();
 		case NCCommands.COM_EXIT:
 			exitTheRoom();
 		}
 	}	
+
+	private void getHistory() {
+		ArrayList<NCSendMessage> historial = ncConnector.getHistorial(room);
+		
+	}
 
 	//Método para solicitar al servidor la información sobre una sala y para mostrarla por pantalla
 	private void getAndShowInfo() throws IOException {

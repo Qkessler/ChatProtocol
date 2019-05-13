@@ -47,6 +47,9 @@ public class RoomManagerSubclase extends NCRoomManager{
 		this.roomName = roomName;
 		
 	}
+	public ArrayList<NCSendMessage> getHistorial(){
+		return historial;
+	}
 
 	@Override
 	public NCRoomDescription getDescription() {

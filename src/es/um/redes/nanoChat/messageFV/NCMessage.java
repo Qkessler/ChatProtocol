@@ -26,6 +26,7 @@ public abstract class NCMessage {
 	public static final byte OP_SEND_ROOMINFO = 12;
 	public static final byte OP_EXIT = 13;
 	public static final byte OP_SEND_CHAT = 14;
+	public static final byte OP_GET_HISTORY = 15;
 	
 	//Constantes con los delimitadores de los mensajes de field:value
 	public static final char DELIMITER = ':';    //Define el delimitador
@@ -44,7 +45,7 @@ public abstract class NCMessage {
 		OP_NICK, OP_NICK_OK, OP_NICK_DUPLICADO, OP_GET_ROOMLIST, 
 		OP_SEND_ROOMLIST, OP_ENTER_ROOM, OP_ENTER_TRUE, OP_ENTER_FALSE, 
 		OP_LEAVE_ROOM, OP_REMOVE_USER, OP_GET_ROOMINFO, OP_SEND_ROOMINFO,
-		OP_EXIT, OP_SEND_CHAT
+		OP_EXIT, OP_SEND_CHAT, OP_GET_HISTORY
 		};
 
 	/**
@@ -53,7 +54,7 @@ public abstract class NCMessage {
 	private static final String[] _valid_operations = {
 		"Nick", "Nick_OK", "Nick_DUPLICATED", "getRoomList", "sendRoomList",
 		"enterRoom", "enter_True", "enter_False", "leaveRoom", "removeUser",
-		"getRoomInfo", "sendRoomInfo", "exit", "sendChat"
+		"getRoomInfo", "sendRoomInfo", "exit", "sendChat", "getHistory"
 		};
 
 	/**
@@ -155,6 +156,8 @@ public abstract class NCMessage {
 			{
 				return NCSendMessage.readFromString(code, message);
 			}
+			case OP_GET_HISTORY:
+				return NCHistoryMessage.readFromString(code, message);
 			default:
 				System.err.println("Unknown message type received:" + code);
 				return null;
@@ -181,6 +184,10 @@ public abstract class NCMessage {
 
 	public static NCSendMessage makeSendMessage(byte opSendChat, String name, String text) {		//, long date
 		return (new NCSendMessage(opSendChat, name, text));		//, date
+	}
+
+	public static NCHistoryMessage makeHistoryMessage(byte code, ArrayList<NCSendMessage> messages) {
+		return (new NCHistoryMessage(code, messages));
 	}
 
 }

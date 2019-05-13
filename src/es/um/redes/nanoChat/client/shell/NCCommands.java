@@ -14,6 +14,7 @@ public class NCCommands {
 	public static final byte COM_QUIT = 8;
 	public static final byte COM_HELP = 9;
 	public static final byte COM_SOCKET_IN = 101;
+	public static final byte COM_HISTORY = 10;
 	
 	/**
 	 * Códigos de los comandos válidos que puede
@@ -29,7 +30,8 @@ public class NCCommands {
 		COM_EXIT, 
 		COM_ROOMINFO,
 		COM_QUIT,
-		COM_HELP
+		COM_HELP,
+		COM_HISTORY
 		};
 
 	/**
@@ -43,7 +45,9 @@ public class NCCommands {
 		"exit",
 		"info",
 		"quit",
-		"help" };
+		"help",
+		"history"
+		};
 
 	/**
 	 * Mensaje de ayuda para cada orden
@@ -56,7 +60,8 @@ public class NCCommands {
 		"to leave the current room", 
 		"shows the information of the room",
 		"to quit the application",
-		"shows this information"};
+		"shows this information",
+		"shows last room messages"};
 
 	/**
 	 * Transforma una cadena introducida en el código de comando correspondiente

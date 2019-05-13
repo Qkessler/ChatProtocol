@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import es.um.redes.nanoChat.messageFV.NCSendMessage;
+
 public abstract class NCRoomManager {
 	String roomName;
 
@@ -19,6 +21,7 @@ public abstract class NCRoomManager {
 	public abstract NCRoomDescription getDescription();
 	//Método para devolver el número de usuarios conectados a una sala
 	public abstract int usersInRoom();
+	public abstract ArrayList<NCSendMessage> getHistorial();
 	
 
 }
