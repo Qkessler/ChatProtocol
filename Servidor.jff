@@ -1,149 +1,143 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--Created with JFLAP 7.1.--><structure>&#13;
-	<type>fa</type>&#13;
-	<automaton>&#13;
-		<!--The list of states.-->&#13;
-		<state id="0" name="q0">&#13;
-			<x>80.0</x>&#13;
-			<y>435.0</y>&#13;
-		</state>&#13;
-		<state id="1" name="q1">&#13;
-			<x>295.0</x>&#13;
-			<y>435.0</y>&#13;
-		</state>&#13;
-		<state id="2" name="q2">&#13;
-			<x>203.0</x>&#13;
-			<y>293.0</y>&#13;
-		</state>&#13;
-		<state id="3" name="q3">&#13;
-			<x>502.0</x>&#13;
-			<y>474.0</y>&#13;
-			<label>Preregistro</label>&#13;
-		</state>&#13;
-		<state id="4" name="q4">&#13;
-			<x>476.0</x>&#13;
-			<y>557.0</y>&#13;
-			<label>FinPrograma</label>&#13;
-		</state>&#13;
-		<state id="5" name="q5">&#13;
-			<x>705.0</x>&#13;
-			<y>467.0</y>&#13;
-		</state>&#13;
-		<state id="6" name="q6">&#13;
-			<x>561.0</x>&#13;
-			<y>385.0</y>&#13;
-			<label>EnSala</label>&#13;
-		</state>&#13;
-		<state id="7" name="q7">&#13;
-			<x>333.0</x>&#13;
-			<y>272.0</y>&#13;
-		</state>&#13;
-		<state id="8" name="q8">&#13;
-			<x>767.0</x>&#13;
-			<y>316.0</y>&#13;
-		</state>&#13;
-		<state id="9" name="q9">&#13;
-			<x>867.0</x>&#13;
-			<y>451.0</y>&#13;
-			<label>Registrado</label>&#13;
-		</state>&#13;
-		<state id="10" name="q10">&#13;
-			<x>665.0</x>&#13;
-			<y>630.0</y>&#13;
-		</state>&#13;
-		<state id="11" name="q11">&#13;
-			<x>351.0</x>&#13;
-			<y>367.0</y>&#13;
-		</state>&#13;
-		<!--The list of transitions.-->&#13;
-		<transition>&#13;
-			<from>8</from>&#13;
-			<to>6</to>&#13;
-			<read>send(OK)</read>&#13;
-		</transition>&#13;
-		<transition>&#13;
-			<from>9</from>&#13;
-			<to>4</to>&#13;
-			<read>receive(quit)</read>&#13;
-		</transition>&#13;
-		<transition>&#13;
-			<from>6</from>&#13;
-			<to>6</to>&#13;
-			<read>receive(sendChat)</read>&#13;
-		</transition>&#13;
-		<transition>&#13;
-			<from>11</from>&#13;
-			<to>3</to>&#13;
-			<read>EstableceConexión</read>&#13;
-		</transition>&#13;
-		<transition>&#13;
-			<from>1</from>&#13;
-			<to>2</to>&#13;
-			<read>receive(registroOK)</read>&#13;
-		</transition>&#13;
-		<transition>&#13;
-			<from>6</from>&#13;
-			<to>7</to>&#13;
-			<read>receive(getInfo)</read>&#13;
-		</transition>&#13;
-		<transition>&#13;
-			<from>7</from>&#13;
-			<to>6</to>&#13;
-			<read>send(sendRoomList)</read>&#13;
-		</transition>&#13;
-		<transition>&#13;
-			<from>6</from>&#13;
-			<to>9</to>&#13;
-			<read>receive(exit)</read>&#13;
-		</transition>&#13;
-		<transition>&#13;
-			<from>0</from>&#13;
-			<to>1</to>&#13;
-			<read>send(registro)</read>&#13;
-		</transition>&#13;
-		<transition>&#13;
-			<from>10</from>&#13;
-			<to>9</to>&#13;
-			<read>send(sendRoomList)</read>&#13;
-		</transition>&#13;
-		<transition>&#13;
-			<from>5</from>&#13;
-			<to>3</to>&#13;
-			<read>send(DUPLICADO)</read>&#13;
-		</transition>&#13;
-		<transition>&#13;
-			<from>3</from>&#13;
-			<to>11</to>&#13;
-			<read>FalloConexión</read>&#13;
-		</transition>&#13;
-		<transition>&#13;
-			<from>2</from>&#13;
-			<to>11</to>&#13;
-			<read>IntentoConexion</read>&#13;
-		</transition>&#13;
-		<transition>&#13;
-			<from>1</from>&#13;
-			<to>4</to>&#13;
-			<read>receive(registroNOOK)</read>&#13;
-		</transition>&#13;
-		<transition>&#13;
-			<from>3</from>&#13;
-			<to>5</to>&#13;
-			<read>receive(nick)</read>&#13;
-		</transition>&#13;
-		<transition>&#13;
-			<from>5</from>&#13;
-			<to>9</to>&#13;
-			<read>send(OK)</read>&#13;
-		</transition>&#13;
-		<transition>&#13;
-			<from>9</from>&#13;
-			<to>8</to>&#13;
-			<read>receive(enter)</read>&#13;
-		</transition>&#13;
-		<transition>&#13;
-			<from>9</from>&#13;
-			<to>10</to>&#13;
-			<read>receive(getRoomList)</read>&#13;
-		</transition>&#13;
-	</automaton>&#13;
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--Created with JFLAP 6.4.--><structure>
+	<type>fa</type>
+	<automaton>
+		<!--The list of states.-->
+		<state id="0" name="q0">
+			<x>95.0</x>
+			<y>516.0</y>
+			<initial/>
+		</state>
+		<state id="1" name="q1">
+			<x>299.0</x>
+			<y>515.0</y>
+		</state>
+		<state id="2" name="q2">
+			<x>396.0</x>
+			<y>341.0</y>
+			<final/>
+		</state>
+		<state id="3" name="q3">
+			<x>532.0</x>
+			<y>485.0</y>
+			<label>Preregistro</label>
+			<final/>
+		</state>
+		<state id="4" name="q4">
+			<x>306.0</x>
+			<y>669.0</y>
+			<label>FinPrograma</label>
+			<final/>
+		</state>
+		<state id="5" name="q5">
+			<x>690.0</x>
+			<y>389.0</y>
+		</state>
+		<state id="6" name="q6">
+			<x>785.0</x>
+			<y>317.0</y>
+			<label>EnSala</label>
+			<final/>
+		</state>
+		<state id="7" name="q7">
+			<x>1062.0</x>
+			<y>317.0</y>
+		</state>
+		<state id="8" name="q8">
+			<x>650.0</x>
+			<y>582.0</y>
+			<label>FinHilo</label>
+			<final/>
+		</state>
+		<state id="9" name="q9">
+			<x>968.0</x>
+			<y>514.0</y>
+			<label>Registrado</label>
+			<final/>
+		</state>
+		<state id="10" name="q10">
+			<x>756.0</x>
+			<y>676.0</y>
+		</state>
+		<!--The list of transitions.-->
+		<transition>
+			<from>7</from>
+			<to>6</to>
+			<read>send(sendRoomList)</read>
+		</transition>
+		<transition>
+			<from>5</from>
+			<to>9</to>
+			<read>send(OK)</read>
+		</transition>
+		<transition>
+			<from>6</from>
+			<to>6</to>
+			<read>receive(sendChat)</read>
+		</transition>
+		<transition>
+			<from>9</from>
+			<to>8</to>
+			<read>receive(quit)</read>
+		</transition>
+		<transition>
+			<from>6</from>
+			<to>7</to>
+			<read>receive(getInfo)</read>
+		</transition>
+		<transition>
+			<from>9</from>
+			<to>6</to>
+			<read>receive(enter)</read>
+		</transition>
+		<transition>
+			<from>5</from>
+			<to>3</to>
+			<read>send(DUPLICADO)</read>
+		</transition>
+		<transition>
+			<from>1</from>
+			<to>2</to>
+			<read>receive(registroOK)</read>
+		</transition>
+		<transition>
+			<from>9</from>
+			<to>10</to>
+			<read>receive(getRoomList)</read>
+		</transition>
+		<transition>
+			<from>1</from>
+			<to>4</to>
+			<read>receive(registroNOOK)</read>
+		</transition>
+		<transition>
+			<from>6</from>
+			<to>6</to>
+			<read>send(sendChat)</read>
+		</transition>
+		<transition>
+			<from>6</from>
+			<to>9</to>
+			<read>receive(exit)</read>
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>1</to>
+			<read>send(registro)</read>
+		</transition>
+		<transition>
+			<from>10</from>
+			<to>9</to>
+			<read>send(sendRoomList)</read>
+		</transition>
+		<transition>
+			<from>2</from>
+			<to>3</to>
+			<read>conexion_establecida</read>
+		</transition>
+		<transition>
+			<from>3</from>
+			<to>5</to>
+			<read>receive(nick)</read>
+		</transition>
+	</automaton>
 </structure>

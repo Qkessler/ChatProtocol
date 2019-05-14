@@ -18,6 +18,21 @@
 		</state>
 		<!--The list of transitions.-->
 		<transition>
+			<from>2</from>
+			<to>0</to>
+			<read>send(registro_NO_OK)</read>
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>1</to>
+			<read>receive(consulta)</read>
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>2</to>
+			<read>receive(registro)</read>
+		</transition>
+		<transition>
 			<from>1</from>
 			<to>0</to>
 			<read>send(consulta_vacia)</read>
@@ -30,22 +45,7 @@
 		<transition>
 			<from>2</from>
 			<to>0</to>
-			<read>send(registro_NO_OK)</read>
-		</transition>
-		<transition>
-			<from>2</from>
-			<to>0</to>
 			<read>send(registro_OK)</read>
-		</transition>
-		<transition>
-			<from>0</from>
-			<to>2</to>
-			<read>receive(registro)</read>
-		</transition>
-		<transition>
-			<from>0</from>
-			<to>1</to>
-			<read>receive(consulta)</read>
 		</transition>
 	</automaton>
 </structure>
